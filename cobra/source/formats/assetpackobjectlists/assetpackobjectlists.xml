@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="AssetPackObjectListsRoot" inherit="MemStruct">
+        <field name="AssetPackObjectLists_list"  type="ArrayPointer" template="AssetPackObjectList" arg="AssetPackObjectLists_count"/>
+        <field name="AssetPackObjectLists_count" type="uint64" />
+    </struct>
+
+    <struct name="AssetPackObjectList" inherit="MemStruct">
+        <field name="AssetPackObjectList_Name" type="Pointer" template="ZString" />
+        <field name="SceneryObjectResource_Items"   type="ArrayPointer" template="SceneryObjectResource_ref" arg="SceneryObjectResource_Count"/>
+        <field name="SceneryObjectResource_Count" type="uint64" />
+        <field name="Unit_Items"   type="ArrayPointer" template="Unit_ref" arg="Unit_Count"/> <!-- is this .miniaturedata ? -->
+        <field name="Unit_Count" type="uint64" />
+    </struct>
+
+    <struct name="SceneryObjectResource_ref" inherit="MemStruct">
+        <field name="dependency_name" type="Pointer" />
+    </struct>
+
+    <struct name="Unit_ref" inherit="MemStruct">
+        <field name="Unit_Name" type="Pointer" template="ZString" />
+    </struct>
+
+</fileformat>

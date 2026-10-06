@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="CinematicRoot" inherit="MemStruct">
+        <field name="names" type="Pointer" template="ZStringList" arg="names_count"/>
+        <field name="names_count" type="uint64" />
+        <field name="data" type="ArrayPointer" template="CinematicData" arg="data_count"/>
+        <field name="data_count" type="uint64" />
+    </struct>
+
+    <struct name="CinematicData" inherit="MemStruct">
+        <field name="default_name" type="Pointer" template="ZString"/>
+        <field name="next_levels" type="ArrayPointer" template="State" arg="next_level_count"/>
+        <field name="next_level_count" type="uint64" />
+    </struct>
+
+    <struct name="State" inherit="MemStruct">
+        JWE2: 64 bytes
+        <field name="abstract_name" type="Pointer" template="ZString"/>
+        <field name="concrete_name" type="Pointer" template="ZString"/>
+        <field name="prefab_name" type="Pointer" template="ZString"/>
+        <field name="a" type="uint64" />
+        <field name="b" type="uint64" />
+        <field name="c" type="uint64" />
+        <field name="events_list" type="Pointer" template="EventsList" />
+        <field name="d" type="uint64" />
+    </struct>
+
+    <struct name="EventsList" inherit="MemStruct">
+        <field name="events" type="ArrayPointer" template="Event" arg="num_events"/>
+        <field name="num_events" type="uint64" />
+    </struct>
+
+    <struct name="Event" inherit="MemStruct">
+        32 bytes
+        <field name="start_time" type="float" />
+        <field name="b" type="float" />
+        <field name="module_name" type="Pointer" template="ZString" />
+        <field name="attributes" type="Pointer" template="EventAttributes" />
+        <field name="duration" type="float" />
+        <field name="d" type="float" />
+    </struct>
+
+    <struct name="EventAttributes" inherit="MemStruct">
+        24 bytes
+        <field name="anim_name" type="Pointer" template="ZString" />
+        <field name="event_name" type="Pointer" template="ZString" />
+        <field name="empty_string" type="Pointer" template="ZString" />
+    </struct>
+
+</fileformat>

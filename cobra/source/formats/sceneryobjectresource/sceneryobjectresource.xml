@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="SceneryObjectResourceRoot" inherit="MemStruct">
+        <!-- ghur, nature, nofaction (might be "temple"), kruleboys, tzeentch, nighthaunts, stormcast... -->
+        <field name="faction_tags"  type="Pointer" template="ZStringList" arg="faction_tags_count"/>
+        <field name="faction_tags_count" type="uint64" />
+        <!-- building, buildingblocks, gameplay structue, nature... -->
+        <field name="resource_types_tags"  type="Pointer" template="ZStringList" arg="resource_types_tags_count">main biome</field>
+        <field name="resource_types_tags_count" type="uint64" />
+        <field name="asset_pack_tags"  type="Pointer" template="ZStringList" arg="asset_pack_tags_count"/>
+        <field name="asset_pack_tags_count" type="uint64" />
+        <!-- grass, shrub, rock, dressing, floorkit, stairs, wallkit... -->
+        <field name="primary_group_tags"  type="Pointer" template="ZStringList" arg="primary_group_tags_count"/>
+        <field name="primary_group_tags_count" type="uint64" />
+        <!-- pointer @ 64 -->
+        <field name="secondary_group_tags" type="Pointer" template="ZStringList" arg="secondary_group_tags_count"/>
+        <field name="secondary_group_tags_count" type="uint64" />        
+        <!-- pointer @ 80, fortification, variant... -->
+        <field name="functional_tags"  type="Pointer" template="ZStringList" arg="functional_tags_count"/>
+        <field name="functional_tags_count" type="uint64" />
+        <field name="unk_0" type="uint64" />
+        <field name="unk_1" type="uint64" />
+        <field name="unk_2" type="uint" />
+        <field name="unk_3" type="uint" />
+        <!-- pointer @ 120 -->
+        <field name="variant_names" type="Pointer" template="ZStringList" arg="variant_names_count"/>
+        <field name="variant_names_count" type="uint64" />
+        <!-- pointer @ 136 -->
+        <field name="child_scenery_resource_name" type="Pointer" template="ZString" />
+        <!-- pointer @ 144 -->
+        <field name="parent_scenery_resource_name" type="Pointer" template="ZString" />
+        <field name="unk_4" type="uint64" />
+    </struct>
+
+</fileformat>

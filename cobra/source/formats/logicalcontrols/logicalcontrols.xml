@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <!-- # .logicalcontrols need to be in Init.ovl for loading on time. -->
+    <!-- arrays also seem to be nullptr terminated -->
+
+    <struct name="LogicalControls" inherit="MemStruct">
+        <field name="buttons" type="ArrayPointer" template="Button" arg="button_count"/>
+
+        <!-- axes, axis_buttons and d are causing crashes in PC if the pointer to the array exists, but I can't -->
+        <!-- figure a way to not create the pointer to an empty array. -->
+
+        <field name="axes" type="ArrayPointer" template="AxisValue" arg="axis_count"  optional="true"/>
+        <field name="axis_buttons" type="ArrayPointer" template="AxisButton" arg="count3" optional="true"/>
+        <field name="d" type="ArrayPointer" template="Some" arg="count4" optional="true" />
+        <field name="button_count" type="ubyte" />
+        <field name="axis_count" type="ubyte" />
+        <field name="count3" type="ubyte" />
+        <field name="count4" type="ubyte" />
+        <field name="flags" type="uint" />
+        <field name="unsure" type="Pointer" template="ZString"/>
+    </struct>
+
+    <struct name="ButtonData" inherit="MemStruct">
+        <field name="k1a" type="ushort"/>
+        <field name="k1b" type="ushort"/>
+        <field name="k2" type="uint"/>
+        <field name="k3" type="uint"/>
+        <field name="k4" type="uint"/>
+    </struct>
+
+    <struct name="ButtonStr" inherit="MemStruct">
+        <field name="ref_name" type="Pointer" template="ZString"/>
+    </struct>
+
+    <struct name="PCButtonData" inherit="MemStruct">
+        #Specific for PC, the format is completely different
+        <field name="keys" type="ArrayPointer" template="ButtonStr" arg="key_count"/>
+        <field name="key_count" type="ushort" />
+        <field name="key_flags" type="ushort" />
+        <field name="unkown" type="uint"/>
+    </struct>
+
+    <struct name="Button" inherit="MemStruct">
+        <field name="button_name" type="Pointer" template="ZString"/>
+        <field name="datas" type="ArrayPointer" template="ButtonData" arg="datas_count" vercond="!#PC#"/>
+        <field name="pcdatas" type="ArrayPointer" template="PCButtonData" arg="datas_count" vercond="#PC#"/>
+        <field name="datas_count" type="uint" />
+        <field name="flags" type="uint"/>
+    </struct>
+
+    <struct name="AxisValue" inherit="MemStruct">
+        <field name="axis_name" type="Pointer" template="ZString"/>
+        <field name="button_1_name" type="Pointer" template="ZString"/>
+        <field name="button_2_name" type="Pointer" template="ZString"/>
+        <field name="unk" type="uint64"/>
+        <field name="combined_value_name" type="Pointer" template="ZString"/>
+        <field name="single_value_1_name" type="Pointer" template="ZString"/>
+        <field name="single_value_2_name" type="Pointer" template="ZString"/>
+    </struct>
+
+    <struct name="AxisButton" inherit="MemStruct">
+        24 bytes, can be padded to 32
+        <field name="button_name" type="Pointer" template="ZString"/>
+        <field name="axis_name_x" type="Pointer" template="ZString"/>
+        <field name="axis_name_y" type="Pointer" template="ZString"/>
+    </struct>
+
+    <struct name="Some" inherit="MemStruct">
+        24 bytes
+        <field name="some_name" type="Pointer" template="ZString"/>
+        <field name="some_data" type="ArrayPointer" template="SomeData" arg="some_count"/>
+        <field name="some_count" type="uint64"/>
+    </struct>
+
+    <struct name="SomeData" inherit="MemStruct">
+        16 bytes
+        <field name="key" type="uint"/>
+        <field name="extra" type="uint"/>
+        <field name="a" type="float"/>
+        <field name="b" type="float"/>
+    </struct>
+
+</fileformat>

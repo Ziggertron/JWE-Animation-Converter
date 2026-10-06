@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="ArrWrapper" inherit="MemStruct">
+        16 bytes
+        <field name="arr" type="ArrayPointer" template="#TEMPLATE#" arg="count"/>
+        <field name="count" type="ushort" />
+        <field name="flag" type="ushort" /> <!-- 255 if used, count can be positive regardless -->
+        <field name="unk" type="uint" />
+    </struct>
+
+    <struct name="Surface" inherit="MemStruct">
+        24 bytes
+        # todo: define the right property name for these values
+        <field name="surface_name" type="Pointer" template="ZString"/>
+        <field name="float1"   type="float" />
+        <field name="float2"   type="float" />
+        <field name="float3"   type="float" />
+        <field name="float4"   type="float" />
+    </struct>
+
+    <struct name="PhysicsSurfaceXMLResRoot" inherit="MemStruct">
+        all are mime version 3 .-.
+        PC: 112 bytes
+        JWE1: 112 bytes
+        PZ, JWE2, WH: 80 bytes
+
+        <!-- # There is an initial 'default' surface, these params are the same as in SurfacePhysicsInfo -->
+        <field name="default_surface" type="Surface" /> <!-- 24 @0 -->
+
+        <field name="unk64_1"  type="uint64" /> <!-- 8 @ 24 -->
+        <field name="name1" type="Pointer" template="ZString"/> <!-- 8 @ 32 -->
+        <field name="name2" type="Pointer" template="ZString"/> <!-- 8 @ 40 -->
+        <field name="nil_ptr" type="Pointer" template="EmptyStruct"/> <!-- 8 @ 48 nil pointer for JWE1, PZ, JWE2 -->
+
+        <field name="OnlyNamesJWE1" type="ArrWrapper" template="OnlyName" vercond="#JWE#" />
+        <!-- surfaces is a special case in PC, count is set yet the ptr goes to end of pool -->
+        <field name="surfaces" type="ArrWrapper" template="SurfacePhysicsInfo" /> <!-- 16 @ 56 -->
+        <field name="arr2" type="ArrWrapper" template="Struct2" vercond="#PC#"/>
+        <field name="OnlyNames" type="ArrWrapper" template="OnlyName" vercond="#PC# #OR# #JWE#" />
+
+        <field name="unk32_2" type="uint" />
+        <field name="unk32_3" type="uint" />
+
+    </struct>
+
+    <struct name="Struct2" inherit="MemStruct">
+        PC: 24 bytes
+        <field name="name1" type="Pointer" template="ZString"/>
+        <field name="arr" type="ArrayPointer" template="Struct2Sub" arg="count" />
+        <field name="count"   type="ushort" />
+        <field name="short2"   type="ushort" /> <!-- 255 -->
+        <field name="unk32_2"  type="uint" />
+    </struct>
+
+    <struct name="Struct2Sub" inherit="MemStruct">
+        PC: 72 bytes
+        <field name="surface" type="Surface" />
+
+        <field name="c"    type="uint64" />
+        <field name="d"    type="uint64" />
+        <field name="e"    type="uint64" />
+        <field name="f"    type="uint64" />
+        <field name="nil" type="Pointer" template="EmptyStruct"/>
+<!--        <field name="flag"    type="uint64" />-->
+        <field name="bitflag"    type="uint" />
+        <field name="unkflag"    type="uint" />
+<!--        <field name="count1"    type="uint" />-->
+    </struct>
+
+    <struct name="OnlyName" inherit="MemStruct">
+        PC, JWE1: 16 bytes
+        <field name="name1" type="Pointer" template="ZString"/>
+        <field name="index"  type="uint64" />
+    </struct>
+
+    <struct name="SurfacePhysicsInfo" inherit="MemStruct">
+        # PC: not used / crashes
+        # JWE1: 16 bytes
+        # PZ, JWE2, WH: 56 bytes
+        <field name="surface" type="Surface" />
+
+        <field name="unk64_1"  type="uint64" />
+
+        <!-- todo: name1 observed as string sometimes -->
+        <!-- todo: name2 observed empty all the times -->
+        <field name="name1" type="Pointer" template="ZString"/>
+        <field name="name2" type="Pointer" template="ZString"/> <!-- not sure if it's a ptr at all -->
+        <field name="nil" type="Pointer" template="EmptyStruct"/>
+    </struct>
+
+    <!-- Observed in JWE2 and PZ the pointers to this struct are completely empty -->
+    <struct name="EmptyStruct" inherit="MemStruct">
+    </struct>
+
+</fileformat>

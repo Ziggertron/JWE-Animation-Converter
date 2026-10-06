@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="BuildingBiomeLayerRoot" inherit="MemStruct">
+        <field name="set_id_name"  type="Pointer" template="ZStringObfuscated"/>
+        <field name="LayerData" type="ArrayPointer" template="BuildingBiomeData" arg="count"/>
+        <field name="count"  type="uint64" />
+        <field name="unk_2_found_as_0"  type="uint64" />
+    </struct>
+
+    <struct name="BuildingBiomeData" inherit="MemStruct">
+        <field name="layer" type="uint64"/>
+        <field name="name1" type="Pointer" template="ZString"/>
+        <field name="name2" type="Pointer" template="ZString"/>
+        <field name="padding" type="uint64"/>
+    </struct>
+
+</fileformat>

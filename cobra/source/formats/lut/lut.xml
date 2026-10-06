@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+	<struct name="LutHeader" inherit="MemStruct">
+        24 bytes for JWE2
+        <field name="_colors" type="ArrayPointer" template="Vector3" arg="colors_count"/>
+		<field name="colors_count" type="ushort"/>
+		<field name="unk_0" type="ushort" default="1"/>
+		<field name="unk_1" type="uint" default="2"/>
+		<field name="colors_in_column_count" type="uint"/>
+		<field name="dimensions" type="uint" default="3"/>
+    </struct>
+
+
+</fileformat>

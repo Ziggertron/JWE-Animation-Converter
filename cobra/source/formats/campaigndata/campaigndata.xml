@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="CampaignDataRoot" inherit="MemStruct">
+        <field name="Campaign_Name" type="Pointer" template="ZString" />
+        <field name="Campaign_Description" type="Pointer" template="ZString" />
+        <field name="Campaign_Unknown" type="uint64" />
+        <field name="Chapter_List" type="ArrayPointer" template="MissionData" arg="Chapter_Count"/>
+        <field name="Chapter_Count" type="uint64" />
+        <field name="Chapter_Unknown" type="uint64" />
+    </struct>
+
+    <struct name="MissionData" inherit="MemStruct">
+        <field name="dependency_name" type="Pointer" />
+    </struct>
+
+</fileformat>

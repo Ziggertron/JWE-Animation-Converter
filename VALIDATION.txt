@@ -1,0 +1,20 @@
+Validation performed on October 6, 2026
+
+Input: JWE 1 Content0/Dinosaurs/Triceratops/Triceratops.ovl
+Target: triceratops_skeleton_.ms2
+Animation containers:
+  triceratops@staticattack.mani17faa134.manis
+  locomotion.maniset7cc5cf92.manis
+Runtime: installed Blender 5.0.0 / Python 3.11.13 / Windows x64
+
+Result: 43 animated GLBs exported, 0 failed clips.
+Independent binary checks verified GLB JSON/BIN chunks, animation channels,
+strictly increasing sample timestamps, finite sampled transforms, and at
+least one varying transform channel in every exported clip.
+
+This verifies animation-bearing skeleton GLBs for the tested archive. It does
+not certify every JWE archive, all game versions, mesh export, retargeting,
+or equivalence to the game's blended playback. Textures are omitted.
+
+Packaged EXE smoke test: interface widgets created, Blender 5.0 detected,
+worker present, and test exited successfully.

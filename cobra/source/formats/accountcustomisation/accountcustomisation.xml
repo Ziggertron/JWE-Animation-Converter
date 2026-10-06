@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="AccountCustomisationRoot" inherit="MemStruct">
+        <field name="Customization_UUID" type="Pointer" template="ZString"/>
+        <field name="Customization_Name" type="Pointer" template="ZString"/>
+        <field name="Customization_Description" type="Pointer" template="ZString"/>
+        <field name="Customization_ID" type="Pointer" template="ZString"/>
+    </struct>
+
+</fileformat>

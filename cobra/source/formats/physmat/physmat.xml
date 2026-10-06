@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="PhysmatRoot" inherit="MemStruct">
+
+        <field name="all_surfaces_count" type="uint" />
+        <field name="surface_res_count" type="uint" />
+        <field name="classnames_count" type="uint" />
+        <field name="stringbuffer_size" type="uint" />
+
+        <field name="pointers" type="uint64" arr1="5"/>
+        <field name="all_surfaces_flags" type="uint64" arr1="all_surfaces_count"/>
+
+        <field name="surface_res_indices" type="uint" arr1="surface_res_count"/>
+        <field name="all_surfaces_names" type="uint" arr1="all_surfaces_count"/>
+        <field name="surface_res_names" type="uint" arr1="surface_res_count"/>
+        <field name="classnames_names" type="uint" arr1="classnames_count"/>
+        <field name="classnames_indices" type="ubyte" arr1="classnames_count"/>
+        <field name="names" type="ZStringBuffer" arg="stringbuffer_size"/>
+    </struct>
+
+</fileformat>

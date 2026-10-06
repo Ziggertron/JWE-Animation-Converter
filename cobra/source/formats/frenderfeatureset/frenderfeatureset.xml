@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="FRenderFeatureSetRoot" inherit="MemStruct">
+        <field name="featureset_list"    type="ArrayPointer" template="FeatureSetItem" arg="featureset_count"/>
+        <field name="featureset_count"   type="uint" />
+        <field name="unknown_always_1"   type="uint" />
+    </struct>
+
+    <struct name="FeatureSetItem" inherit="MemStruct">
+        <field name="feature_name"  type="Pointer" template="ZString"/>
+    </struct>
+
+</fileformat>

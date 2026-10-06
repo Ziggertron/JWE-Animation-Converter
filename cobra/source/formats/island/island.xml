@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="IslandRoot" inherit="MemStruct">
+        JWE2: 32 bytes
+        <field name="path_name" type="Pointer" template="ZString"/>
+        <field name="a" type="float"/>
+        <field name="b" type="float"/>
+        <field name="count" type="uint64"/>
+        <field name="zero" type="uint64"/>
+    </struct>
+
+</fileformat>

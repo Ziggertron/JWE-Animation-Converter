@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="TrackStationRoot" inherit="MemStruct">
+
+        <!-- PC2 1.0.7.434846 .trackstation is 80 bytes -->
+        <!-- PZ and PC .trackstation is 128 bytes -->
+        <field name="Station Grid Sizes" type="float" arr1="2"/>
+        <field name="Flags" type="uint64"/> <!-- Flags == 1 used as Flume for PC2 -->
+
+        <!-- offset 16 First diff, in PZ2 this ptr seems empty --> 
+        <field name="Unknown Ptr" type="uint64" vercond="is_PC2" default="0" optional="true"/> 
+        <field name="Corner Edge Track" type="Pointer" template="CornerEdgeTrack" vercond="!is_PC2"/>
+
+		<!-- Offset 24 --> 
+        <field name="Corner Edge Track" type="Pointer" template="CornerEdgeTrack" vercond="is_PC2"/>
+		<field name="Track Only" type="Pointer" template="CommonChunk" vercond="!is_PC2"/>
+
+		<!-- Offset 32 --> 
+		<field name="Track Only" type="Pointer" template="CommonChunk" vercond="is_PC2"/>
+		<field name="Control Box Front Panel" type="Pointer" template="ZString" vercond="!is_PC2"/>
+
+		<!-- Offset 40 --> 
+		<field name="Control Box Info" type="Pointer" template="ControlBoxInfo" vercond="is_PC2"/>
+		<field name="Control Box Left Panel" type="Pointer" template="ZString" vercond="!is_PC2"/>
+
+		<!-- Offset 48 --> 
+		<field name="Gate Info" type="Pointer" template="GateInfo" vercond="is_PC2"/>
+		<field name="Control Box Right Panel" type="Pointer" template="ZString" vercond="!is_PC2"/>
+
+		<!-- Offset 56 --> 
+		<field name="Unknown 56" type="uint64" vercond="is_PC2" default="0" optional="true"/>
+		<field name="Entrance Gate" type="Pointer" template="ZString" vercond="!is_PC2"/>
+
+		<!-- Offset 64 --> 
+		<field name="Flume Info" type="Pointer" template="FlumeInfo" vercond="is_PC2"/> <!-- Used in flumes, but could be an open station system for coasters -->
+		<field name="Exit Gate" type="Pointer" template="ZString" vercond="!is_PC2"/>
+
+		<!-- Offset 72 --> 
+		<field name="Unknown 72" type="uint64" vercond="is_PC2" default="0" optional="true"/>
+        <field name="unk ints2" type="uint" arr1="2" vercond="!is_PC2"/>
+
+		<!-- Offset 80, no more PC2 --> 
+		<field name="Fence Extrusion" type="Pointer" template="ZString" vercond="!is_PC2"/>
+		<field name="Small Fence Extrusion" type="Pointer" template="ZString" vercond="!is_PC2"/>
+		<field name="Fence Cap" type="Pointer" template="ZString" vercond="!is_PC2"/>
+        <field name="unk floats2" type="float" arr1="4" vercond="!is_PC2"/>
+        <field name="unk floats3" type="uint" arr1="2" vercond="!is_PC2"/>
+
+    </struct>
+
+	<struct name="FlumeInfo" inherit="MemStruct">
+        <!-- PC2 1.0.7.434846 32 bytes -->
+        <field name="Starts" type="ArrayPointer" template="Start" arg="Starts_count"/>
+        <field name="Starts_count" type="uint64" />
+        <field name="Ends" type="ArrayPointer" template="End" arg="Ends_count"/>
+        <field name="Ends_count" type="uint64" />
+    </struct>
+
+	<struct name="Start" inherit="MemStruct">
+        <!-- PC2 1.0.7.434846 32 bytes -->
+		<field name="Element" type="Pointer" template="ZString"/>
+		<field name="Entrance" type="Pointer" template="ZString"/>
+		<field name="Rear" type="Pointer" template="ZString"/>
+		<field name="Middle" type="Pointer" template="ZString"/>
+		<field name="Front" type="Pointer" template="ZString"/>
+		<field name="FrontGate" type="Pointer" template="ZString"/>
+    </struct>
+
+	<struct name="End" inherit="MemStruct">
+        <!-- PC2 1.0.7.434846 32 bytes -->
+		<field name="Element" type="Pointer" template="ZString"/>
+		<field name="Start" type="Pointer" template="ZString"/>
+		<field name="Middle" type="Pointer" template="ZString"/>
+		<field name="End" type="Pointer" template="ZString"/>
+		<field name="Support" type="Pointer" template="ZString"/>
+    </struct>
+
+	<struct name="GateInfo" inherit="MemStruct">
+        <!-- PC2 1.0.7.434846 64 bytes -->
+		<field name="Entrance Gate" type="Pointer" template="ZString"/>
+		<field name="Exit Gate" type="Pointer" template="ZString"/>
+        <field name="Unknown PTR" type="Pointer" template="ZString" optional="true"/>
+		<field name="Fence Extrusion" type="Pointer" template="ZString"/>
+		<field name="Small Fence Extrusion" type="Pointer" template="ZString"/>
+		<field name="Fence Cap" type="Pointer" template="ZString"/>
+        <field name="Floats" type="float" arr1="4"/>
+    </struct>
+
+	<struct name="ControlBoxInfo" inherit="MemStruct">
+        <!-- PC2 1.0.7.434846 48 bytes -->
+		<field name="Front Panel" type="Pointer" template="ZString"/>
+		<field name="Left Panel" type="Pointer" template="ZString"/>
+		<field name="Right Panel" type="Pointer" template="ZString"/>
+        <field name="Position" type="float" arr1="3"/> <!-- X, Y, Z is unused, fixed to the station height -->
+        <field name="Unkown Float 1" type="float" default="0" optional="true"/> <!-- can be padding -->
+        <field name="Unkown Float 2" type="float" default="0" optional="true"/> <!-- can be padding -->
+        <field name="Unkown Float 3" type="float" default="0" optional="true"/> <!-- can be padding -->
+        <field name="Unkown Float 4" type="float" default="0" optional="true"/> <!-- can be padding -->
+    </struct>
+
+	<struct name="FrontMidBack" inherit="MemStruct">
+		<field name="Front" type="Pointer" template="ZString"/>
+		<field name="Middle" type="Pointer" template="ZString"/>
+		<field name="Back" type="Pointer" template="ZString"/>
+		<field name="Front Rotation" type="ubyte"/>
+		<field name="Middle Rotation" type="ubyte"/>
+		<field name="Back Rotation" type="ubyte"/>
+		<field name="Unkown Byte 0" type="ubyte" default="0" optional="true"/>
+		<field name="Unkown Byte 1" type="ubyte" default="0" optional="true"/>
+		<field name="Unkown Byte 2" type="ubyte" default="0" optional="true"/>
+		<field name="Unkown Byte 3" type="ubyte" default="0" optional="true"/>
+		<field name="Unkown Byte 4" type="ubyte" default="0" optional="true"/>
+    </struct>
+
+	<struct name="CommonChunk" inherit="MemStruct">
+        PZ and PC: 104 bytes, core
+        PZ and PC: 112 bytes, wrapped
+		<field name="Width" type="float"/> <!-- station piece width/offset -->
+		<field name="Height" type="float" default="0" optional="true"/> <!-- not used -->
+		<field name="Top" type="FrontMidBack"/>
+		<field name="Base" type="FrontMidBack"/>
+		<field name="Supports" type="FrontMidBack"/>
+	</struct>
+
+	<struct name="TrackOnly" inherit="CommonChunk">
+        PZ and PC: 112 bytes
+		<field name="zero2" type="uint64"/>
+	</struct>
+	
+	<struct name="CornerEdgeTrack" inherit="MemStruct">
+        PC:  320 bytes
+        PC2: 320 bytes
+		unused on PZ
+		<field name="Corner" type="CommonChunk"/>
+		<field name="Edge" type="CommonChunk"/>
+		<field name="Track" type="CommonChunk"/>
+		<field name="zero" type="uint64" default="0" optional="true"/>
+    </struct>
+
+</fileformat>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="AccountLevelsDataRoot" inherit="MemStruct">
+        <field name="AccountLevel_version" type="uint64" />
+        <field name="AccountLevels"  type="ArrayPointer" template="AccountLevel" arg="AccountLevels_count"/>
+        <field name="AccountLevels_count" type="uint64" />
+    </struct>
+
+    <struct name="AccountLevel" inherit="MemStruct">
+        <field name="Level_Id" type="uint64" />
+        <field name="Levels" type="Pointer" template="ZStringList" arg="Levels_count"/>
+        <field name="Levels_count" type="uint64" />
+    </struct>
+
+</fileformat>

@@ -1,0 +1,33 @@
+from generated.base_enum import BaseEnum
+from generated.formats.base.basic import Ubyte
+
+
+class HircType(BaseEnum):
+
+	__name__ = 'HircType'
+	_storage = Ubyte
+
+	NONE = 0
+	SETTINGS = 1
+	SOUND = 2
+	EVENT_ACTION = 3
+	EVENT = 4
+	RAN_SEQ_CONTAINER = 5
+	SWITCH_CONTAINER = 6
+	ACTOR_MIXER = 7
+	AUDIO_BUS = 8
+	BLEND_CONTAINER = 9
+	MUSIC_SEGMENT = 10
+	MUSIC_TRACK = 11
+	MUSIC_SWITCH_CONTAINER = 12
+	MUSIC_PLAYLIST_CONTAINER = 13
+	ATTENUATION = 14
+	DIALOGUE_EVENT = 15
+	MOTION_BUS = 16
+	MOTION_FX = 17
+	EFFECT = 18
+	EFFECT_CUSTOM = 19
+	AUXILIARY_BUS = 20
+	LFO = 21
+	ENVELOPE = 22
+	AUDIO_DEVICE = 23

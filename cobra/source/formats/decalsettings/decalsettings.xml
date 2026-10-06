@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="DecalSettingsRoot" inherit="MemStruct">
+        <field name="atlas_name"  type="Pointer" template="ZString"/>
+        <field name="layer_list"  type="ArrayPointer" template="DecalSettingItem" arg="layer_count"/>
+        <field name="layer_count" type="uint64" />
+        <field name="unknown"     type="uint64" />
+    </struct>
+
+    <struct name="DecalSettingItem" inherit="MemStruct">
+        <field name="layer_name"  type="Pointer" template="ZString"/>
+    </struct>
+
+</fileformat>

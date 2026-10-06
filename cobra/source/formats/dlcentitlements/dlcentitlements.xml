@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="DLCEntitlementsRoot" inherit="MemStruct">
+        <field name="Entitlement_list"  type="ArrayPointer" template="Entitlement" arg="Entitlement_count"/>
+        <field name="Entitlement_count" type="uint64" />
+    </struct>
+
+    <struct name="Entitlement" inherit="MemStruct">
+        <field name="Entitlement_name" type="Pointer" template="ZString"/>
+        <field name="Id" type="uint64" />
+        <field name="Rewards" type="Pointer" template="ZStringList" arg="Rewards_count"/>
+        <field name="Rewards_count" type="uint64" />
+    </struct>
+
+</fileformat>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="PoseDriverDefRoot" inherit="MemStruct">
+        <field name="drivers" type="ArrayPointer" template="Driver" arg="count"/>
+        <field name="count" type="uint64" />
+    </struct>
+
+    <struct name="Driver" inherit="MemStruct">
+        48 bytes
+        <field name="joint_name" type="Pointer" template="ZString"/>
+        <field name="a" type="ubyte" />
+        <field name="b" type="ubyte" />
+        <field name="c" type="ushort" />
+        <field name="d" type="uint" />
+        <field name="driven_joint_name" type="Pointer" template="ZString"/>
+        <field name="unk1" type="uint64" />
+        <field name="data" type="Pointer" template="Data" />
+        <field name="unk2" type="uint64" />
+    </struct>
+
+    <struct name="Data" inherit="MemStruct">
+        <field name="floats" type="float" arr1="16"/>
+    </struct>
+
+</fileformat>

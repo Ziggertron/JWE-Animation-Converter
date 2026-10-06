@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="CasinoLodRoot" inherit="MemStruct">
+        PZ, JWE2 32 bytes
+        <field name="LodName" type="Pointer" template="ZString"/>
+        <field name="LodGroups"   type="ArrayPointer" template="LodGroup" arg="LodGroups_count"/>
+        <field name="LodGroups_count"  type="uint64" />
+        <field name="zero"  type="uint64" default="0" optional="True"/>
+    </struct>
+
+    <struct name="LodGroup" inherit="MemStruct">
+        PC, JWE2 24 bytes
+        <field name="LodName" type="Pointer" template="ZString"/>
+        <field name="Lods"   type="ArrayPointer" template="Lod" arg="Lods_count"/>
+        <field name="Lods_count"  type="uint64" />
+    </struct>
+
+    <struct name="Lod" inherit="MemStruct">
+        PC, JWE2 20 bytes
+        <field name="floats"  type="float" arr1="5"/>
+    </struct>
+
+</fileformat>

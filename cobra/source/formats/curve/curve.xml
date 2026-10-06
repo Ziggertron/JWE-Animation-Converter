@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="CurveRoot" inherit="MemStruct">
+        <field name="keys" type="ArrayPointer" template="Key" arg="count"/>
+        <field name="count" type="uint64" />
+    </struct>
+
+    <struct name="Key" inherit="MemStruct">
+        <field name="time" type="float" />
+        <field name="value" type="float" />
+    </struct>
+
+</fileformat>

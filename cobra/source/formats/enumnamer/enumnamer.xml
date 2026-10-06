@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="EnumnamerRoot" inherit="MemStruct">
+        <field name="strings_count" type="uint64" />
+        <field name="strings" type="Pointer" template="ZStringList" arg="strings_count"/>
+    </struct>
+
+</fileformat>

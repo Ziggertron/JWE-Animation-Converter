@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="NavigationSettingsRoot" inherit="MemStruct">
+        PZ: 96 bytes
+        <field name="settings_count" type="uint64" />
+        <field name="settings_default_name" type="Pointer" template="ZString" />
+
+        <field name="navigation_source_types"  type="Pointer" template="ZStringList" arg="navigation_source_types_count"/>
+        <field name="navigation_source_types_count" type="uint64" />
+
+        <field name="navigation_flags"  type="Pointer" template="ZStringList" arg="navigation_flags_count"/>
+        <field name="navigation_flags_count" type="uint64" />
+
+        <field name="navigation_test"  type="ArrayPointer" template="navigation_test_list" arg="navigation_test_count"/>
+        <field name="navigation_test_count" type="uint64" />
+
+        <field name="NavigationAreaCostsFilterNames"  type="ArrayPointer" template="NavigationAreaCostsFilter" arg="NavigationAreaCostsFilterNames_Count"/>
+        <field name="NavigationAreaCostsFilterNames_Count" type="uint64" />
+
+        <field name="NavigationModeFilterNames"  type="ArrayPointer" template="NavigationModeFilter" arg="NavigationModeFilterNames_Count"/>
+        <field name="NavigationModeFilterNames_Count" type="uint64" />
+
+
+    </struct>
+
+    <struct name="navigation_test_list" inherit="MemStruct">
+        <field name="navigation_test_name" type="Pointer" template="ZString" />
+        <field name="navigation_test_flags"  type="Pointer" template="ZStringList" arg="navigation_test_flags_count"/>
+        <field name="navigation_test_flags_count" type="uint64" />
+    </struct>
+
+    <struct name="NavigationAreaCostsFilter" inherit="MemStruct">
+        <field name="NavigationAreaCostsFilterName" type="Pointer" template="ZString" />
+        <field name="NavigationAreaCosts"  type="ArrayPointer" template="NavigationAreaCostsData" arg="NavigationAreaCosts_count"/>
+        <field name="NavigationAreaCosts_count" type="uint64" />
+    </struct>
+
+    <struct name="NavigationAreaCostsData" inherit="MemStruct">
+        <field name="NavigationAreaName" type="Pointer" template="ZString" />
+        <field name="NavigationAreaWeight1" type="float" />
+        <field name="NavigationAreaWeight2" type="float" />
+    </struct>
+
+    <struct name="NavigationModeFilter" inherit="MemStruct">
+        <field name="NavigationModeFilterName" type="Pointer" template="ZString" />
+        <field name="NavigationModeFilterFlags"  type="Pointer" template="ZStringList" arg="NavigationModeFilterFlags_count"/>
+        <field name="NavigationModeFilterFlags_count" type="uint64" />
+    </struct>
+
+
+</fileformat>

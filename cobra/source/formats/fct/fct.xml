@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="Font" inherit="MemStruct">
+        JWE: 16 bytes
+        <field name="data_size" type="uint64" />
+        <field name="zero" type="uint64" />
+    </struct>
+
+    <struct name="FctRoot" inherit="MemStruct">
+        JWE: 104 bytes
+        <field name="u0" type="short" />
+        <field name="u1" type="short" />
+        <field name="a" type="float" />
+        <field name="b" type="float" />
+        <field name="c" type="float" />
+        <field name="minus_1" type="short" />
+        <field name="z0" type="short" />
+        <field name="z1" type="int" />
+        <field name="z2" type="uint64" />
+        <field name="offset" type="uint64" /> <!-- usually 1088 into buffer data -->
+        <field name="fonts" type="Font" arr1="4"/>
+    </struct>
+
+</fileformat>
+

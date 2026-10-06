@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="BrushRoot" inherit="MemStruct">
+        24 bytes
+        <field name="_zero" type="uint64" />
+        <field name="num_pixels" type="uint64" />
+        <field name="x" type="uint" />
+        <field name="y" type="uint" />
+    </struct>
+
+</fileformat>

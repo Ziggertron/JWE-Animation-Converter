@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+    <token name="verexpr" attrs="vercond">
+        <verexpr token="#DLA#" string="(#VER# #EQ# 7)">DLA</verexpr>
+        <verexpr token="#ZTUAC#" string="(#VER# #EQ# 13)">ZTUAC</verexpr>
+        <verexpr token="#PC#" string="(#VER# #EQ# 32)">PC</verexpr>
+        <verexpr token="#JWE#" string="((#VER# #EQ# 47) #OR# (#VER# #EQ# 39))">JWE</verexpr>
+        <verexpr token="#PZ#" string="((#VER# #EQ# 48) #OR# (#VER# #EQ# 50))">PZ all</verexpr>
+        <verexpr token="#PZ16#" string="(#VER# #EQ# 50)">PZ 1.6+</verexpr>
+        <verexpr token="#JWE2#" string="(#VER# #EQ# 51)">JWE2</verexpr>
+        There is a versioning issue introduced by the Biosyn update as the ms2 version has not been incremented immediately
+        <verexpr token="#JWE2_BIO#" string="(#VER# #EQ# 52)">JWE2</verexpr>
+        <verexpr token="#WAR#" string="(#VER# #EQ# 53)">Warhammer Age of Sigmar - Realms of Ruin</verexpr>
+        <verexpr token="#PC2#" string="(#VER# #EQ# 54)">Planet Coaster 2</verexpr>
+        <verexpr token="#JWE3#" string="(#VER# #EQ# 55)">JWE3</verexpr>
+    </token>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="LODPoints" inherit="MemStruct">
+        <field name="DiscardAtLod" type="ushort" vercond="!(#PC# #OR# #JWE#)" />
+        <field name="MaxLods" type="ushort" default="6" vercond="!(#PC# #OR# #JWE#)" />
+        <field name="LodPoints" type="float" arr1="5" />
+        <field name="PixelSizeOff" type="float" />
+    </struct>
+
+    <struct name="LODGroup" inherit="MemStruct">
+        PC, JWE1 40 bytes
+        PZ, JWE2, PC2 56 bytes
+        <field name="GroupName" type="Pointer" template="ZString"/>
+        <field name="UnkFloat1" type="float" default="0.0" optional="true" />
+        <field name="MaxModelBoundingSphereRadius" type="float" />
+        <field name="LodPoints" type="LODPoints" />
+        <field name="SubLodPoints_count" default="0" type="uint" vercond="!(#PC# #OR# #JWE#)"/>
+        <field name="SubLodPoints" type="ArrayPointer" template="LODPoints" arg="SubLodPoints_count" vercond="!(#PC# #OR# #JWE#)" />
+    </struct>
+
+    <struct name="FRenderLodSpecRoot" inherit="MemStruct">
+        PZ, JWE2 16 bytes
+        <field name="jwe3_id" type="Pointer" template="ZString" vercond="#JWE3#"/>
+        <field name="LodGroups" type="ArrayPointer" template="LODGroup" arg="LodGroups_count"/>
+        <field name="LodGroups_count" type="uint64" />
+    </struct>
+
+</fileformat>

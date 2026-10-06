@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="AssetpkgRoot" inherit="MemStruct">
+        <field name="asset_path" type="Pointer" template="ZString" />
+        <field name="shared" type="uint64" default="0" optional="True"/>
+    </struct>
+
+</fileformat>

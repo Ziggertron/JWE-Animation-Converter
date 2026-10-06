@@ -1,0 +1,265 @@
+import sys
+import logging
+import platform
+from dataclasses import dataclass
+from typing import TYPE_CHECKING, NamedTuple, Optional, TypeVar
+from pathlib import Path
+
+root_dir = Path(__file__).resolve().parent.parent
+
+from utils import logs
+from utils.config import save_config
+from . import auto_updater
+
+
+def is_dev_environment():
+	"""
+	Checks if running in a development environment
+	"""
+	try:
+		from importlib.util import find_spec
+		has_git = (root_dir / ".git").is_dir()
+		has_pytest = find_spec("pytest")
+		return has_git and has_pytest
+	except Exception:
+		return False
+
+if TYPE_CHECKING:
+	from gui.widgets import MainWindow
+	from PyQt5.QtWidgets import QApplication
+	WindowT = TypeVar('WindowT', bound='MainWindow')
+
+
+def check_64bit_env() -> None:
+	is_64bits = sys.maxsize > 2 ** 32
+	if not is_64bits:
+		logging.warning(
+			"Either your operating system or your python installation is not 64 bits. "
+			"Large OVLs will crash unexpectedly!")
+
+def register_fonts(directory: Path):
+	"""
+	Scans a directory for .ttf files and registers them with the QApplication.
+	"""
+	if not directory.is_dir():
+		print(f"Error: Font directory not found at '{directory}'")
+		return
+
+	from PyQt5.QtGui import QFontDatabase
+	# Iterate over all files in the directory with a .ttf extension
+	for font_file in directory.glob("*.ttf"):
+		try:
+			font_id = QFontDatabase.addApplicationFont(str(font_file))
+			# QFontDatabase.addApplicationFont returns -1 on failure
+			if font_id == -1:
+				print(f"Error: Failed to load font: {font_file.name}")
+		except Exception as e:
+			print(f"Error: An exception occurred while loading {font_file.name}: {e}")
+
+
+class Size(NamedTuple):
+	width: int
+	height: int
+
+
+@dataclass
+class GuiOptions:
+	"""
+	A dataclass to hold GUI and application configuration options.
+	
+	The 'size' attribute can be initialized with either a Size object or a
+	tuple like (width, height), and it will be automatically converted.
+	"""
+	log_name: str
+	log_to_file: bool = True
+	log_to_stdout: bool = True
+	log_backup_count: int = 4
+	size: Size = Size(800, 600)
+	logger_width: int = 320
+	logger_height: int = 200
+	logger_enabled: bool = True
+	qapp: Optional['QApplication'] = None
+	frameless: bool = True
+	check_update: bool = True
+	style: str = "Fusion"
+	qss_file: str = ""
+	stylesheet: str = R"""
+		QToolTip { color: #ffffff; background-color: #353535; border: 1px solid white; }
+	"""
+	debug_layout: bool = False
+
+	def __post_init__(self):
+		if isinstance(self.size, tuple):
+			# Convert it to a proper Size NamedTuple instance.
+			self.size = Size(*self.size)
+
+
+def sanitize_environment():
+	"""
+	Checks for Mojibake (corruption) in env variables.
+	Attempts to fix by restarting in UTF-8 mode, or falls back to temp redirection.
+	"""
+	import os
+	# Check common temp keys for question marks (corruption)
+	keys_to_check = ["TEMP", "TMP", "APPDATA", "LOCALAPPDATA"]
+	corrupt = False
+	for key in keys_to_check:
+		if "?" in os.environ.get(key, ""):
+			corrupt = True
+			break
+
+	if corrupt:
+		if "PYTHONUTF8" not in os.environ:
+			print("Detected corrupt environment paths. Attempting to set PYTHONUTF8=1...")
+			os.environ["PYTHONUTF8"] = "1"
+
+		safe_dir = root_dir / "safe_temp"
+		safe_dir.mkdir(exist_ok=True)
+		safe_path = str(safe_dir.resolve())
+
+		os.environ["TEMP"] = safe_path
+		os.environ["TMP"] = safe_path
+
+		try:
+			# Restart the process
+			os.execv(sys.executable, [sys.executable] + sys.argv)
+		except Exception as e:
+			print(f"Failed to restart: {e}")
+
+
+def create_window(cls: type['WindowT'], opts: GuiOptions, **kwargs) -> tuple['WindowT', 'QApplication']:
+	"""Initialize the window class, logs, and QApplication if necessary"""
+	handler = logs.logging_setup(opts.log_name,
+								 log_to_file=opts.log_to_file,
+								 log_to_stdout=opts.log_to_stdout,
+								 backup_count=opts.log_backup_count)
+	from PyQt5.QtCore import Qt, qVersion
+	from PyQt5.QtWidgets import QApplication
+	check_64bit_env()
+	app = opts.qapp
+	if app is None:
+		if platform.system() == "Windows":
+			import ctypes
+			myappid = 'Open Naja OVL Tools'
+			ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+
+		if qVersion().startswith("5."):
+			QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+			QApplication.setAttribute(Qt.ApplicationAttribute.AA_EnableHighDpiScaling)
+			QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps)
+		app = QApplication([])
+
+	# Register Fonts
+	font_dir = root_dir / 'gui' / 'fonts'
+	register_fonts(font_dir)
+	# Create MainWindow instance
+	win = cls(opts=opts, **kwargs)
+	return win, app
+
+
+def setup_app(cls: type['WindowT'], opts: GuiOptions, **kwargs) -> tuple['WindowT', 'QApplication']:
+	"""
+	Contains all the non-blocking setup logic
+	"""
+	if opts.check_update:
+		auto_updater.run_update_check(tool_name=opts.log_name)
+
+	# Check if existing qapp passed here, before create_window
+	do_init = not opts.qapp
+
+	win, app_qt = create_window(cls, opts, **kwargs)
+	if do_init:
+		from PyQt5.QtWidgets import QStyleFactory
+		from gui.tools.layout_visualizer import install_layout_visualizer
+		app_qt.setStyle(QStyleFactory.create(opts.style))
+		app_qt.setPalette(win.get_palette_from_cfg())
+		if opts.qss_file:
+			with open(opts.qss_file, "r") as qss:
+				app_qt.setStyleSheet(qss.read())
+		elif opts.stylesheet:
+			app_qt.setStyleSheet(opts.stylesheet)
+		if opts.debug_layout:
+			install_layout_visualizer(win)
+	return win, app_qt
+
+
+def startup(cls: type['WindowT'], opts: GuiOptions, **kwargs) -> None:
+	"""
+	The application entry point
+	"""
+	sanitize_environment()
+	win, app_qt = setup_app(cls, opts, **kwargs)
+
+	import signal
+	def sigint_handler(*args):
+		"""Custom handler for the SIGINT signal."""
+		# Safely tell the Qt application to quit.
+		logging.warning("RECEIVED SIGINT")
+		if app_qt:
+			app_qt.quit()
+
+	signal.signal(signal.SIGINT, sigint_handler)
+
+	def graceful_shutdown():
+		"""
+		Runs before Qt objects are destroyed
+		"""
+		if win.SHUTDOWN_RUN:
+			return
+		import atexit
+		logging.info("SHUTTING DOWN")
+		win.SHUTDOWN_RUN = True
+		try:
+			cfg_path = root_dir / "config.json"
+			save_config(cfg_path, win.cfg)
+		except Exception as e:
+			logging.error(f"Error saving config during shutdown: {e}")
+
+		listener = logs.get_global_listener()
+		if listener:
+			listener.stop()
+
+		atexit.unregister(logging.shutdown)
+		logging.shutdown()
+
+		if win.RESTART_ON_EXIT:
+			import subprocess
+			if sys.platform == "win32":
+				subprocess.Popen([sys.executable] + sys.argv, creationflags=subprocess.CREATE_NEW_CONSOLE)
+			else:
+				os.execv(sys.executable, [sys.executable] + sys.argv)
+
+	# Attempt to use aboutToQuit, with fallback in `finally`
+	app_qt.aboutToQuit.connect(graceful_shutdown)
+
+	win.show()
+	win.activateWindow()
+	# Assume failure by default
+	exit_code = 1
+	try:
+		exit_code = app_qt.exec_()
+	finally:
+		graceful_shutdown()  # Try again for abnormal exits
+		# ENV var for keeping console open for debugging without an attached IDE
+		import os
+		if os.environ.get("DEBUG_WAIT_ON_EXIT") == "1":
+			print(f"\n--- [DEBUG] (PID: {os.getpid()}) GUI has closed. Pausing before final cleanup. ---")
+			print("--- Press Enter to exit console. ---")
+			try:
+				input() 
+			except EOFError:
+				print(f"\n--- [DEBUG] (PID: {os.getpid()}) stdin not available. Pausing... ---")
+				import time
+				try:
+					time.sleep(900)  # 15 minutes
+				except KeyboardInterrupt:
+					pass
+			except KeyboardInterrupt:
+				pass
+
+		if 'app_qt' in locals():
+			app_qt.deleteLater()
+		if 'win' in locals():
+			win.deleteLater()
+
+	sys.exit(exit_code)

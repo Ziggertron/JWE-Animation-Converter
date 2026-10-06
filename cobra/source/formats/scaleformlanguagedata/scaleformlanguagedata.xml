@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="ScaleformlanguagedataRoot" inherit="MemStruct">
+        # PC - is maybe organized differently here
+        PZ: 48 bytes
+        <field name="gfx_files" type="ArrayPointer" template="GfxReference" arg="gfx_files_count" />
+        <field name="gfx_files_count" type="uint64" />
+        <field name="fonts" type="ArrayPointer" template="FontInfo" arg="fonts_count" />
+        <field name="fonts_count" type="uint64" />
+        <field name="zero2" type="uint64" />
+        <field name="zero3" type="uint64" />
+    </struct>
+
+    <struct name="GfxReference" inherit="MemStruct">
+        8 or 16 bytes, unsure
+        <field name="gfx_name" type="Pointer" template="ZString" />
+        <field name="unk_maybe" type="uint64" />
+    </struct>
+
+    <struct name="FontInfo" inherit="MemStruct">
+        24 bytes
+        <field name="style_name" type="Pointer" template="ZString" />
+        <field name="font_file" type="Pointer" template="ZString" />
+        <field name="flag_or_count" type="uint64" />
+    </struct>
+
+</fileformat>

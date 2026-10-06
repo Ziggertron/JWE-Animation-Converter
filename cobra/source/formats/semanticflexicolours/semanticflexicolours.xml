@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="SemanticFlexiColoursRoot" inherit="MemStruct">
+        <field name="names"  type="Pointer" template="ZStringList" arg="names_count"/>
+        <field name="names_count"  type="uint64" />
+    </struct>
+
+    <struct name="SemanticFlexiColourOverridesRoot" inherit="MemStruct">
+        <field name="color_overrides"  type="ArrayPointer" template="ColorOverride" arg="num_color_overrides"/>
+        <field name="game_overrides"  type="ArrayPointer" template="GameOverride" arg="num_game_overrides"/>
+        <field name="num_color_overrides"  type="ushort" />
+        <field name="num_game_overrides"  type="ushort" />
+        <field name="_z0"  type="int" />
+        <field name="_z1"  type="uint64" />
+    </struct>
+
+    <struct name="FloatColor" inherit="MemStruct">
+        <field name="R" type="float"/>
+        <field name="G" type="float"/>
+        <field name="B" type="float"/>
+        <field name="A" type="float"/>
+    </struct>
+
+    <struct name="ColorOverride" inherit="MemStruct">
+        PZ: 24 bytes
+        <field name="flexi_name"  type="Pointer" template="ZString"/>
+        <field name="color"  type="FloatColor" />
+    </struct>
+
+    <struct name="GameOverride" inherit="MemStruct">
+        PZ: 32 bytes
+        <field name="game_names"  type="Pointer" template="ZStringList" arg="game_names_count"/>
+        <field name="game_names_count"  type="uint64" />
+        <field name="flexi_names"  type="Pointer" template="ZStringList" arg="num_flexi_names"/>
+        <field name="num_flexi_names"  type="uint64" />
+    </struct>
+
+</fileformat>

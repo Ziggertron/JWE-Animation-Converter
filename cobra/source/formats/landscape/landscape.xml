@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<token name="verexpr" attrs="vercond">
+		<verexpr token="#DLA#" string="(#VER# #EQ# 21)">DLA</verexpr>
+		<verexpr token="#ZTUAC#" string="(#VER# #EQ# 21)">ZTUAC</verexpr>
+	</token>
+
+	<token name="global" attrs="vercond access">
+		Global Tokens.
+		NOTE: These must be listed after the above tokens so that they replace last. For example, `verexpr` uses these tokens.
+		<global token="#VER#" string="version" />
+	</token>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+	<!-- set latest occurrence of a version number in a game first so that that is set by the setters -->
+	<version id="DLA" version="21" >Disneyland Adventures</version>
+	<version id="ZTUAC" version="21" >Zoo Tycoon</version>
+
+    <basic name="NameOffset" integral="true" countable="true">
+    </basic>
+
+	<struct name="LandscapeRoot" inherit="MemStruct">
+		232 bytes
+		<field name="pointers1" type="uint64" arr1="13"/>
+		<field name="buffer_pointers" type="ArrayPointer" template="BufferPresence" arg="3">links buffers to ms2 dependencies if they are streamed</field>
+		<field name="pointers2" type="uint64" arr1="9"/>
+		<field name="size" type="uint" />
+		<field name="a" type="ushort" />
+		<field name="b" type="ushort" />
+		<field name="rest" type="ubyte" arr1="6"/>
+		<field name="name_buffer_size" type="ushort"/>
+		<field name="rest2" type="ushort" arr1="8"/>
+		<field name="things_count" type="ushort"/>
+		<field name="rest3" type="ushort" arr1="7"/>
+	</struct>
+
+	<struct name="BufferPresence" inherit="MemStruct">
+		<field name="dependency_name" type="Pointer" >in DLA and JWE2, this can be a dependency to a model2stream</field>
+	</struct>
+
+	<struct name="Struct0" >
+		<field name="vec" type="Vector3" />
+		<field name="unk" type="ubyte" arr1="4"/>
+	</struct>
+
+	<struct name="Pass" >
+		8 bytes
+		<field name="name" type="NameOffset" arg="#ARG#"/>
+		<field name="a" type="ushort" />
+		<field name="b" type="ushort" />
+	</struct>
+	<struct name="Lod" >
+		16 bytes
+		<field name="index" type="uint" />
+<!--		not name offsets -->
+		<field name="unk" type="uint" />
+		<field name="unk2" type="ushort" />
+		<field name="index1" type="ushort" />
+		<field name="distance" type="float" />
+	</struct>
+
+	<struct name="Str48" >
+		48 bytes
+		<field name="quat" type="float" arr1="4"/>
+		<field name="v1" type="Vector3" />
+		<field name="v2" type="Vector3" />
+		<field name="a" type="ushort" />
+		<field name="b" type="ushort" />
+		<field name="index" type="uint" />
+	</struct>
+
+	<struct name="Pair" >
+		2 bytes
+		<field name="a" type="ubyte" />
+		<field name="b" type="ubyte" />
+	</struct>
+	<struct name="Repeat2" >
+		4 bytes
+		<field name="ind" type="ushort" />
+		<field name="pair" type="Pair" />
+	</struct>
+	<struct name="RepeatLong" >
+		16 bytes
+		<field name="zero" type="uint64" />
+		<field name="ind" type="ushort" />
+		<field name="pair" type="Pair" arr1="3"/>
+	</struct>
+	<struct name="Something" >
+		16 bytes
+		<field name="flo22" type="float" arr1="4"/>
+		<field name="junk22" type="ubyte" arr1="4"/>
+	</struct>
+
+	<struct name="Buffer0" >
+		<field name="names_buffer" type="ZStringBuffer" arg="#ARG#\name_buffer_size"/>
+		<field name="names padding" type="PadAlign" template="names_buffer" arg="8"/>
+		<field name="floats" type="float" arr1="14"/>
+		<field name="RepeatLong1" type="RepeatLong" arr1="1"/>
+		<field name="lods" type="Lod" arr1="3" arg="names_buffer"/>
+		<field name="stuff" type="uint" arr1="14"/>
+		<field name="names" type="NameOffset" arr1="#ARG#\things_count" arg="names_buffer"/>
+		<field name="floats2" type="float" arr1="29"/>
+		<field name="name" type="NameOffset" arg="names_buffer"/>
+		<field name="count_1" type="ushort" />
+		<field name="count_2" type="ushort" />
+		<field name="count_z0" type="ushort" />
+		<field name="count_z1" type="ushort" />
+		<field name="count_z2" type="ushort" />
+		<field name="count_3" type="ushort" />
+		<field name="Something" type="Something" arr1="count_1"/>
+		<field name="repeats" type="RepeatLong" arr1="count_2" />
+		<field name="floa" type="float" arr1="17" arr2="4" />
+		<field name="name2" type="NameOffset" arg="names_buffer"/>
+		<field name="count_48" type="uint" />
+		<field name="str48" type="Str48" arr1="count_48" />
+		<field name="repeats2" type="ubyte" arr1="24" />
+		<field name="count_Repeat2" type="ushort" />
+		<field name="count_Pass" type="ushort" />
+		<field name="repeats3" type="ubyte" arr1="4" />
+		<field name="Repeat2" type="Repeat2" arr1="count_Repeat2" />
+		<field name="pad" type="ubyte" arr1="4" />
+		<field name="passes" type="Pass" arr1="count_Pass"  arg="names_buffer"/>
+		<field name="unk2" type="ushort" arr1="90"/>
+		<field name="vecs" type="float" arr1="81" arr2="3"/>
+		<field name="unk3" type="ushort" arr1="count_3"/>
+		<field name="unk3a" type="ushort" />
+		<field name="unk3b" type="ushort" />
+		<field name="unk4" type="Struct0" arr1="54"/>
+	</struct>
+
+
+
+	<struct name="Struct2" >
+		224 bytes
+		<field name="a" type="uint"/>
+		<field name="b" type="int"/>
+		<field name="z" type="int"/>
+		<field name="c" type="short"/>
+		<field name="d" type="short"/>
+		<field name="floats" type="float" arr1="3" arr2="4"/>
+		<field name="e" type="uint" arr1="4"/>
+		<field name="floats2" type="float" arr1="6"/>
+		<field name="f" type="uint" arr1="4"/>
+		<field name="floats3" type="float" arr1="6"/>
+		<field name="g" type="uint" />
+		<field name="h" type="ushort" />
+		<field name="i" type="ubyte" />
+		<field name="j" type="ubyte" />
+		<field name="zfinal" type="uint64" arr1="9"/>
+	</struct>
+
+	<struct name="Buffer1" >
+<!--		probably 16 zeros here-->
+		<field name="z0" type="uint64" arr1="2"/>
+<!--		first entry is different-->
+		<field name="unk5" type="Struct2" arr1="5"/>
+<!--		rest is unk-->
+	</struct>
+
+</fileformat>

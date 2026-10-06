@@ -1,0 +1,1 @@
+from generated.formats.dinosaurmaterialvariants.imports import name_type_map

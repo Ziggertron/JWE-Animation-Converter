@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <!-- enough to process all the bytes, just no idea yet what is each section. -->
+ 
+    <struct name="FRenderContextSetRoot" inherit="MemStruct">
+        <field name="ptr1_list"   type="ArrayPointer" template="ContextSet1Item" arg="ptr1_count"/>
+        <field name="ptr1_count"  type="uint64" />
+        <field name="RenderLayers" type="ArrayPointer" template="RenderLayer" arg="RenderLayers_count"/>
+        <field name="RenderLayers_count" type="uint64" />
+        <field name="RenderFeatures" type="ArrayPointer" template="RenderFeature" arg="RenderFeatures_count"/>
+        <field name="RenderFeatures_count" type="uint64" />
+    </struct>
+
+    <struct name="ContextSet1Item" inherit="MemStruct">
+        PZ 96 bytes
+        <field name="stuff1_name"  type="Pointer" template="ZString"/>
+        <field name="stuff11_sub"   type="ArrayPointer" template="ContextSet1SubItem" arg="stuff11_sub_count"/>
+        <field name="stuff11_sub_count"  type="uint64" />
+        <field name="LayerMaps"   type="ArrayPointer" template="LayerMap" arg="LayerMaps_count"/>
+        <field name="LayerMaps_count"  type="uint64" />
+        <field name="stuff13_sub"   type="ArrayPointer" template="ContextSet1SubItem" arg="stuff13_sub_count"/>
+        <field name="stuff13_sub_count"  type="uint64" />
+        <field name="stuff14sub_name"  type="Pointer" template="ZString"/>
+        <field name="stuff15sub_name"  type="Pointer" template="ZString"/>
+        <field name="stuff16sub_name"  type="Pointer" template="ZString"/>
+        <field name="stuff1_unknown1"  type="uint64" />
+        <field name="stuff1_unknown2"  type="uint64" />
+    </struct>
+
+    <struct name="ContextSet1SubItem" inherit="MemStruct">
+        <field name="stuff1sub_name"  type="Pointer" template="ZString"/>
+        <field name="stuff1sub_order_or_flags"  type="uint64" />
+    </struct>
+
+    <struct name="LayerMap" inherit="MemStruct">
+        <field name="layer_name" type="Pointer" template="ZString"/>
+        <field name="specific_name" type="Pointer" template="ZString"/>
+    </struct>
+
+    <struct name="RenderLayer" inherit="MemStruct">
+        <field name="layer_name"  type="Pointer" template="ZString"/>
+        <field name="layer_id"  type="uint64" />
+    </struct>
+
+    <struct name="RenderFeature" inherit="MemStruct">
+        <field name="feature_name"  type="Pointer" template="ZString"/>
+        <field name="options"  type="ArrayPointer" template="FeatureOption" arg="count"/>
+        <field name="count"  type="uint64" />
+    </struct>
+
+    <struct name="FeatureOption" inherit="MemStruct">
+        <field name="name1"  type="Pointer" template="ZString" />
+        <field name="name2"  type="Pointer" template="ZString" />
+        <field name="name3"  type="Pointer" template="ZString" />
+    </struct>
+
+</fileformat>

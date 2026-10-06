@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="STIDRef">
+        <field name="bankID" type="uint" >fnv1</field>
+        <field name="stringsize" type="ubyte"/>
+        <field name="name" type="char" arr1="stringsize"/>
+    </struct>
+
+    <struct name="STIDSection">
+        <field name="length" type="uint" >length of following data</field>
+        <field name="uiType" type="uint"/>
+        <field name="uiSize" type="uint"/>
+        <field name="data pointers" type="STIDRef" arr1="uiSize"/>
+    </struct>
+
+    <struct name="BKHDSection">
+        <field name="length" type="uint" >length of following data</field>
+        <field name="version" type="uint"/>
+        <field name="dwSoundBankID" type="uint"/>
+        <field name="dwLanguageID" type="uint"/>
+        <field name="uAlignment" type="ushort"/>
+        <field name="bDeviceAllocated" type="ushort"/>
+        <field name="dwProjectID" type="uint"/>
+        <field name="padding" type="ubyte" cond="length #GTE# 20" arr1="length - 20">sometimes present</field>
+    </struct>
+
+    <struct name="DataPointer">
+        <field name="wem id" type="uint"/>
+        <field name="data section offset" type="uint" >offset into data section</field>
+        <field name="wem filesize" type="uint" >length of the wem file</field>
+    </struct>
+
+    <struct name="DIDXSection">
+        <field name="length" type="uint" >length of following data</field>
+        <field name="data pointers" type="DataPointer" arr1="length/12"/>
+    </struct>
+
+    <struct name="DATASection">
+        <field name="length" type="uint" >length of following data</field>
+        <field name="wem datas" type="byte" arr1="length">binary data of the wem files</field>
+    </struct>
+
+    <enum name="HircType" numbytes="1" storage="ubyte" default="0">
+		<option value="0" name="NONE" />
+		<option value="1" name="Settings" />
+		<option value="2" name="Sound" />
+		<option value="3" name="EventAction" />
+		<option value="4" name="Event" />
+		<option value="5" name="RanSeqContainer" />
+		<option value="6" name="SwitchContainer" />
+		<option value="7" name="ActorMixer" />
+		<option value="8" name="AudioBus" />
+		<option value="9" name="BlendContainer" />
+		<option value="10" name="MusicSegment" />
+		<option value="11" name="MusicTrack" />
+		<option value="12" name="MusicSwitchContainer" />
+		<option value="13" name="MusicPlaylistContainer" />
+		<option value="14" name="Attenuation" />
+		<option value="15" name="DialogueEvent" />
+		<option value="16" name="MotionBus" />
+		<option value="17" name="MotionFx" />
+		<option value="18" name="Effect" />
+		<option value="19" name="EffectCustom" />
+		<option value="20" name="AuxiliaryBus" />
+		<option value="21" name="LFO" />
+		<option value="22" name="Envelope" />
+		<option value="23" name="AudioDevice" />
+    </enum>
+
+    <enum name="AKBKSourceType" numbytes="1" storage="ubyte" default="0">
+		<option value="0" name="Data" />
+		<option value="1" name="PrefetchStream" />
+		<option value="2" name="Stream" />
+    </enum>
+
+    <enum name="AkPropID" numbytes="1" storage="ubyte" default="0">
+        <option value="0" name="Volume" />
+        <option value="1" name="LFE" />
+        <option value="2" name="Pitch" />
+        <option value="3" name="LPF" />
+        <option value="4" name="HPF" />
+        <option value="5" name="BusVolume" />
+        <option value="6" name="MakeUpGain" />
+        <option value="7" name="Priority" />
+        <option value="8" name="PriorityDistanceOffset" />
+        <option value="11" name="MuteRatio" />
+        <option value="12" name="PAN_LR" />
+        <option value="13" name="PAN_FR" />
+        <option value="14" name="CenterPCT" />
+        <option value="15" name="DelayTime" />
+        <option value="16" name="TransitionTime" />
+        <option value="17" name="Probability" />
+        <option value="18" name="DialogueMode" />
+        <option value="19" name="UserAuxSendVolume0" />
+        <option value="20" name="UserAuxSendVolume1" />
+        <option value="21" name="UserAuxSendVolume2" />
+        <option value="22" name="UserAuxSendVolume3" />
+        <option value="23" name="GameAuxSendVolume" />
+        <option value="24" name="OutputBusVolume" />
+        <option value="25" name="OutputBusHPF" />
+        <option value="26" name="OutputBusLPF" />
+        <option value="27" name="HDRBusThreshold" />
+        <option value="28" name="HDRBusRatio" />
+        <option value="29" name="HDRBusReleaseTime" />
+        <option value="30" name="HDRBusGameParam" />
+        <option value="31" name="HDRBusGameParamMin" />
+        <option value="32" name="HDRBusGameParamMax" />
+        <option value="33" name="HDRActiveRange" />
+        <option value="34" name="LoopStart" />
+        <option value="35" name="LoopEnd" />
+        <option value="36" name="TrimInTime" />
+        <option value="37" name="TrimOutTime" />
+        <option value="38" name="FadeInTime" />
+        <option value="39" name="FadeOutTime" />
+        <option value="40" name="FadeInCurve" />
+        <option value="41" name="FadeOutCurve" />
+        <option value="42" name="LoopCrossfadeDuration" />
+        <option value="43" name="CrossfadeUpCurve" />
+        <option value="44" name="CrossfadeDownCurve" />
+        <option value="45" name="MidiTrackingRootNote" />
+        <option value="46" name="MidiPlayOnNoteType" />
+        <option value="47" name="MidiTransposition" />
+        <option value="48" name="MidiVelocityOffset" />
+        <option value="49" name="MidiKeyRangeMin" />
+        <option value="50" name="MidiKeyRangeMax" />
+        <option value="51" name="MidiVelocityRangeMin" />
+        <option value="52" name="MidiVelocityRangeMax" />
+        <option value="53" name="MidiChannelMask" />
+        <option value="54" name="PlaybackSpeed" />
+        <option value="55" name="MidiTempoSource" />
+        <option value="56" name="MidiTargetNode" />
+        <option value="57" name="AttachedPluginFXID" />
+        <option value="58" name="Loop" />
+        <option value="59" name="InitialDelay" />
+        <option value="60" name="UserAuxSendLPF0" />
+        <option value="61" name="UserAuxSendLPF1" />
+        <option value="62" name="UserAuxSendLPF2" />
+        <option value="63" name="UserAuxSendLPF3" />
+        <option value="64" name="UserAuxSendHPF0" />
+        <option value="65" name="UserAuxSendHPF1" />
+        <option value="66" name="UserAuxSendHPF2" />
+        <option value="67" name="UserAuxSendHPF3" />
+        <option value="68" name="GameAuxSendLPF" />
+        <option value="69" name="GameAuxSendHPF" />
+        <option value="70" name="AttenuationID" />
+        <option value="71" name="PositioningTypeBlend" />
+        <option value="72" name="ReflectionBusVolume" />
+        <option value="73" name="PAN_UD" />
+    </enum>
+
+    <enum name="ActionScope" numbytes="1" storage="ubyte" default="0">
+		<option value="1" name="GameObjectSwitch" />
+		<option value="2" name="Global" />
+		<option value="3" name="GameObjectId" />
+		<option value="4" name="GameObjectState" />
+		<option value="5" name="All" />
+		<option value="9" name="AllExceptId" />
+    </enum>
+
+    <enum name="ActionType" numbytes="1" storage="ubyte" default="0">
+        <option value="0x00" name="None" />
+        <option value="0x12" name="SetState" />
+        <option value="0x1A" name="BypassFX" />
+        <option value="0x1B" name="ResetBypassFX" />
+        <option value="0x19" name="SetSwitch" />
+        <option value="0x10" name="UseState" />
+        <option value="0x11" name="UnuseState" />
+        <option value="0x04" name="Play" />
+        <option value="0x05" name="PlayAndContinue" />
+        <option value="0x01" name="Stop" />
+        <option value="0x02" name="Pause" />
+        <option value="0x03" name="Resume" />
+        <option value="0x1C" name="Break" />
+        <option value="0x06" name="Mute" />
+        <option value="0x07" name="Unmute" />
+        <option value="0x0A" name="SetVolume" />
+        <option value="0x0B" name="ResetVolume" />
+        <option value="0x08" name="SetPitch" />
+        <option value="0x09" name="ResetPitch" />
+        <option value="0x0E" name="SetLPF" />
+        <option value="0x0F" name="ResetLPF" />
+        <option value="0x20" name="SetHPF" />
+        <option value="0x30" name="ResetHPF" />
+        <option value="0x0C" name="SetBusVolume" />
+        <option value="0x0D" name="ResetBusVolume" />
+        <option value="0x21" name="PlayEvent" />
+        <option value="0x15" name="StopEvent" />
+        <option value="0x16" name="PauseEvent" />
+        <option value="0x17" name="ResumeEvent" />
+        <option value="0x18" name="Duck" />
+        <option value="0x1D" name="Trigger" />
+        <option value="0x1E" name="Seek" />
+        <option value="0x22" name="ResetPlaylist" />
+        <option value="0x13" name="SetGameParameter" />
+        <option value="0x14" name="ResetGameParameter" />
+        <option value="0x1F" name="Release" />
+        <option value="0x23" name="PlayEventUnknown_O" />
+        <option value="0x31" name="SetFX" />
+        <option value="0x32" name="ResetSetFX" />
+        <option value="0x40" name="NoOp" />
+        <option value="0x33" name="SetBypassFXSlot" />
+        <option value="0x34" name="ResetBypassFXSlot" />
+        <option value="0x35" name="SetBypassAllFX" />
+        <option value="0x36" name="ResetBypassAllFX" />
+        <option value="0x37" name="ResetAllBypassFX" />
+    </enum>
+
+    <struct name="HircObject">
+        <field name="id" type="uint" >id of this Sound SFX object</field>
+    </struct>
+
+    <struct name="Event" inherit="HircObject">
+        <field name="num actions" type="uint" until="122"/>
+        <field name="num actions" type="ubyte" since="123">todo varint</field>
+        <field name="children" type="uint" arr1="num_actions"/>
+    </struct>
+
+    <struct name="FXChunk">
+        <field name="uFXIndex" type="byte"/>
+        <field name="fxID" type="uint"/>
+        <field name="bIsShareSet" type="byte" until="145"/>
+        <field name="bIsRendered" type="byte" until="145"/>
+        <field name="bitVector" type="byte" since="146">
+                elem.U8x('bitVector') \
+                    .bit('bBypass', obj.lastval, 0) \
+                    .bit('bShareSet', obj.lastval, 1) \
+                    .bit('bRendered', obj.lastval, 2)
+        </field>
+    </struct>
+
+    <struct name="FXChunkBase">
+        <field name="uFXIndex" type="byte"/>
+        <field name="fxID" type="uint"/>
+        <field name="bIsShareSet" type="byte"/>
+    </struct>
+
+    <struct name="NodeInitialFxParams">
+        <field name="bIsOverrideParentFX" type="byte"/>
+        <field name="uNumFx" type="byte"/>
+        <field name="bitsFXBypass" type="byte" cond="uNumFx"/>
+        <field name="fx" type="FXChunk" arr1="uNumFx"/>
+    </struct>
+
+    <struct name="AkPropValue">
+        <field name="pID" type="AkPropID"/>
+        <field name="value" type="float"/> <!-- apparently also uint, depends on pID -->
+    </struct>
+
+    <struct name="AkPropMinMax">
+        <field name="pID" type="AkPropID"/>
+        <field name="min" type="float"/> <!-- apparently also uint, depends on pID -->
+        <field name="max" type="float"/> <!-- apparently also uint, depends on pID -->
+    </struct>
+
+    <struct name="NodeInitialParams">
+        <field name="cProps1" type="ubyte"/>
+        <field name="pProps1" type="AkPropID" arr1="cProps1"/>
+        <field name="pValues1" type="float" arr1="cProps1"/>
+        <field name="cProps2" type="ubyte"/>
+        <field name="pProps2" type="AkPropMinMax" arr1="cProps2"/>
+    </struct>
+
+	<bitfield name="uBitsPositioning" storage="ubyte">
+		<member width="1" pos="0" name="bPositioningInfoOverrideParent" type="int"/>
+		<member width="1" pos="1" name="bHasListenerRelativeRouting" type="int"/>
+		<member width="2" pos="2" name="ePannerType" type="int"/>
+		<member width="2" pos="5" name="e3DPositionType" type="int"/>
+	</bitfield>
+	<bitfield name="uBitsPositioning122" storage="ubyte">
+		<member width="1" pos="0" name="bPositioningInfoOverrideParent" type="int"/>
+		<member width="1" pos="1" name="unknown2d_next_flag" type="int"/>
+		<member width="1" pos="2" name="unknown2d" type="int"/>
+		<member width="1" pos="3" name="cbIs3DPositioningAvailable" type="int"/>
+	</bitfield>
+
+    <struct name="PositioningParams">
+        <field name="uBitsPositioning" type="uBitsPositioning122" until="122"/>
+        <field name="uBitsPositioning" type="uBitsPositioning" since="130"/>
+        <field name="uBits3d" type="ubyte" since="130" cond="uBitsPositioning\bPositioningInfoOverrideParent #AND# uBitsPositioning\bHasListenerRelativeRouting"/>
+        <field name="uBits3d" type="ubyte" until="122" cond="uBitsPositioning\bPositioningInfoOverrideParent #AND# uBitsPositioning\cbIs3DPositioningAvailable"/>
+        <field name="PositioningAutomation" since="130" type="PositioningAutomation" cond="uBitsPositioning\e3DPositionType #AND# uBitsPositioning\bPositioningInfoOverrideParent #AND# uBitsPositioning\bHasListenerRelativeRouting"/>
+        <field name="uAttenuationID" type="int" until="129" cond="uBitsPositioning\bPositioningInfoOverrideParent #AND# uBitsPositioning\cbIs3DPositioningAvailable"/>
+    </struct>
+
+    <struct name="Vec">
+        <field name="x" type="float"/>
+        <field name="y" type="float"/>
+        <field name="z" type="float"/>
+    </struct>
+
+    <struct name="AkPathVertex" inherit="Vec">
+        <field name="Duration" type="int"/>
+    </struct>
+
+    <struct name="AkPathListItemOffset">
+        <field name="ulVerticesOffset" type="uint"/>
+        <field name="iNumVertices" type="uint"/>
+    </struct>
+
+    <struct name="PositioningAutomation">
+        <field name="ePathMode" type="ubyte"/>
+        <field name="TransitionTime" type="int"/>
+        <field name="ulNumVertices" type="uint" />
+        <field name="vertices" type="AkPathVertex" arr1="ulNumVertices" />
+        <field name="ulNumPlayListItem" type="uint"/>
+        <field name="pPlayListItems" type="AkPathListItemOffset" arr1="ulNumPlayListItem"/>
+        <field name="Ak3DAutomationParams" type="Vec" arr1="ulNumPlayListItem"/>
+    </struct>
+
+	<bitfield name="AuxBitfield" storage="ubyte">
+		<member width="1" pos="2" name="bOverrideUserAuxSends" type="int"/>
+		<member width="1" pos="3" name="bHasAux" type="int"/>
+		<member width="1" pos="4" name="bOverrideReflectionsAuxBus" type="int"/>
+	</bitfield>
+
+    <struct name="AuxParams">
+        <field name="byBitVector" type="AuxBitfield"/>
+        <field name="aux" type="uint" arr1="4" cond="byBitVector\bHasAux"/>
+        <field name="reflectionsAuxBus" type="uint" since="135"/>
+    </struct>
+
+    <struct name="AdvSettingsParams">
+        <field name="byBitVector1" type="ubyte"/>
+        <field name="eVirtualQueueBehavior" type="ubyte"/>
+        <field name="u16MaxNumInstance" type="ushort"/>
+        <field name="eBelowThresholdBehavior" type="ubyte"/>
+        <field name="byBitVector2" type="ubyte"/>
+    </struct>
+
+    <struct name="AkStatePropertyInfo">
+<!--        todo varint-->
+        <field name="PropertyId" type="ubyte"/>
+        <field name="accumType" type="ubyte" />
+        <field name="inDb" type="ubyte" />
+    </struct>
+
+    <struct name="AkPropBundleUshortFloat">
+        <field name="pID" type="ushort" />
+        <field name="pValue" type="float" />
+    </struct>
+
+    <struct name="AkState">
+        <field name="ulStateID" type="uint"/>
+        <field name="ulStateInstanceID" type="uint" until="145"/>
+        <field name="nProps" type="ushort" since="146"/>
+        <field name="pProps" type="AkPropBundleUshortFloat" arr1="nProps" since="146"/>
+    </struct>
+
+    <struct name="AkStateGroupChunk">
+        <field name="ulStateGroupID" type="uint"/>
+        <field name="eStateSyncType" type="ubyte" />
+<!--        todo varint-->
+        <field name="ulNumStates" type="ubyte" />
+        <field name="states" type="AkState" arr1="ulNumStates"/>
+    </struct>
+
+
+    <struct name="StateChunk">
+        <field name="ulNumStateProps" type="uint" until="120"/>
+<!--        todo varint-->
+        <field name="ulNumStateProps" type="ubyte" since="121"/>
+        <field name="stateProps" type="AkStatePropertyInfo" arr1="ulNumStateProps"/>
+<!--        todo varint-->
+        <field name="ulNumStateGroups" type="ubyte" since="125"/>
+        <field name="stateGroups" type="AkStateGroupChunk" arr1="ulNumStateGroups" since="125"/>
+    </struct>
+
+    <struct name="AkRTPCGraphPoint">
+        <field name="From_v" type="float"/>
+        <field name="To_v" type="float"/>
+        <field name="Interp" type="uint"/>
+    </struct>
+
+    <struct name="RTPC">
+        <field name="RTPCID" type="uint"/>
+        <field name="rtpcType" type="ubyte"/>
+        <field name="rtpcAccum" type="ubyte"/>
+        <field name="ParamID" type="ubyte"/>  <!-- todo varint -->
+        <field name="rtpcCurveID" type="uint"/>
+        <field name="eScaling" type="ubyte"/>
+        <field name="ulSize" type="ushort"/>
+        <field name="graph" type="AkRTPCGraphPoint" arr1="ulSize"/>
+    </struct>
+
+    <struct name="InitialRTPC">
+        <field name="ulNumRTPC" type="ushort"/>
+        <field name="pRTPCMgr" type="RTPC" arr1="ulNumRTPC"/>
+    </struct>
+
+    <struct name="NodeBaseParams">
+        <field name="NodeInitialFxParams" type="NodeInitialFxParams"/>
+        <field name="bIsOverrideParentMetadata" type="byte" since="140"/>
+        <field name="uNumFx" type="byte" since="140"/>
+        <field name="fx" type="FXChunkBase" arr1="uNumFx" since="140"/>
+        <field name="bOverrideAttachmentParams" type="byte" until="145"/>
+        <field name="OverrideBusId" type="uint"/>
+        <field name="DirectParentID" type="uint"/>
+        <field name="byBitVector" type="ubyte"/>
+        <field name="NodeInitialParams" type="NodeInitialParams"/>
+        <field name="PositioningParams" type="PositioningParams"/>
+        <field name="AuxParams" type="AuxParams"/>
+        <field name="AdvSettingsParams" type="AdvSettingsParams"/>
+        <field name="StateChunk" type="StateChunk"/>
+        <field name="InitialRTPC" type="InitialRTPC"/>
+    </struct>
+
+    <struct name="CAkActionPlay" inherit="HircObject">
+    </struct>
+
+    <struct name="EventAction" inherit="HircObject">
+        <field name="scope" type="ActionScope"/>
+        <field name="action_type" type="ActionType"/>
+        <field name="children" type="uint" arr1="1"/>
+        <field name="idExt_4" type="ubyte"/>
+        <!-- # instead of the stuff below? -->
+        <field name="NodeInitialParams" type="NodeInitialParams"/>
+<!--        <field name="num_params" type="ubyte"/>-->
+<!--        <field name="params" type="ubyte" arr1="num_params"/>-->
+<!--        <field name="num_params_types" type="ubyte"/>-->
+<!--        <field name="params_types" type="uint" arr1="num_params_types"/>-->
+
+<!--        the following is conditional on action type-->
+        <field name="raw" type="byte" arr1="#ARG# - ( 11 + (NodeInitialParams\io_size))" cond="action_type != 4"/>
+        <field name="byBitVector" type="ubyte" default="4" cond="action_type #EQ# 4" />
+        <field name="bankID" type="uint" cond="action_type #EQ# 4" />
+        <field name="bankType" type="uint" cond="action_type #EQ# 4" since="144"/>
+    </struct>
+
+    <struct name="AkPlaylistItem">
+        <field name="ulPlayID" type="uint"/>
+        <field name="weight" type="uint"/>
+    </struct>
+
+    <struct name="RanSeqContainer" inherit="HircObject">
+        wwiser CAkRanSeqCntr__SetInitialValues
+
+        <field name="NodeBaseParams" type="NodeBaseParams"/>
+
+        <field name="sLoopCount" type="ushort"/>
+        <field name="sLoopModMin" type="ushort"/>
+        <field name="sLoopModMax" type="ushort"/>
+        <field name="fTransitionTime" type="float"/>
+        <field name="fTransitionTimeModMin" type="float"/>
+        <field name="fTransitionTimeModMax" type="float"/>
+        <field name="wAvoidRepeatCount" type="ushort"/>
+        <field name="eTransitionMode" type="ubyte"/>
+        <field name="eRandomMode" type="ubyte"/>
+        <field name="eMode" type="ubyte"/>
+        <field name="byBitVector" type="ubyte"/>
+        <field name="Num_Children" type="uint"/>
+        <field name="Children" type="uint" arr1="Num_Children"/>
+        <field name="num_PlayListItem" type="ushort"/>
+        <field name="PlayListItem" type="AkPlaylistItem" arr1="num_PlayListItem"/>
+
+    </struct>
+
+    <struct name="CAkSwitchPackage">
+        <field name="ulSwitchID" type="uint"/>
+        <field name="ulNumItems" type="uint"/>
+        <field name="nodes" type="uint" arr1="ulNumItems"/>
+    </struct>
+
+    <struct name="AkSwitchNodeParams">
+        <field name="ulNodeID" type="uint"/>
+        <field name="byBitVector1" type="ubyte"/>
+        <field name="byBitVector2" type="ubyte"/>
+        <field name="FadeOutTime" type="int"/>
+        <field name="FadeInTime" type="int"/>
+    </struct>
+
+    <struct name="SwitchContainer" inherit="HircObject">
+
+        <field name="NodeBaseParams" type="NodeBaseParams"/>
+
+        <field name="eGroupType" type="ubyte"/>
+        <field name="ulGroupID" type="uint"/>
+        <field name="ulDefaultSwitch" type="uint"/>
+        <field name="bIsContinuousValidation" type="ubyte"/>
+        <field name="Num_Children" type="uint"/>
+        <field name="Children" type="uint" arr1="Num_Children"/>
+        <field name="ulNumSwitchGroups" type="uint"/>
+        <field name="SwitchGroups" type="CAkSwitchPackage" arr1="ulNumSwitchGroups"/>
+        <field name="ulNumSwitchParams" type="uint"/>
+        <field name="SwitchNodeParams" type="AkSwitchNodeParams" arr1="ulNumSwitchParams"/>
+    </struct>
+
+    <struct name="CAssociatedChildData">
+        <field name="ulLayerID" type="uint"/>
+        <field name="ulCurveSize" type="uint"/>
+        <field name="pRTPCMgr" type="AkRTPCGraphPoint" arr1="ulCurveSize"/>
+    </struct>
+
+    <struct name="CAkLayer">
+        <field name="ulLayerID" type="uint"/>
+        <field name="InitialRTPC" type="InitialRTPC"/>
+        <field name="rtpcID" type="uint"/>
+        <field name="rtpcType" type="ubyte"/>
+        <field name="ulNumAssoc" type="uint"/>
+        <field name="assocs" type="CAssociatedChildData" arr1="ulNumAssoc"/>
+    </struct>
+
+    <struct name="BlendContainer" inherit="HircObject">
+
+        <field name="NodeBaseParams" type="NodeBaseParams"/>
+        <field name="Num_Children" type="uint"/>
+        <field name="Children" type="uint" arr1="Num_Children"/>
+        <field name="ulNumLayers" type="uint"/>
+        <field name="Layers" type="CAkLayer" arr1="ulNumLayers"/>
+        <field name="bIsContinuousValidation" type="ubyte"/>
+    </struct>
+
+    <struct name="AkMediaInformation">
+        <field name="sourceID" type="uint"/>
+        <field name="uInMemoryMediaSize" type="uint"/>
+        <field name="uSourceBits" type="ubyte"/>
+    </struct>
+
+	<bitfield name="ulPluginID" storage="uint">
+		<member width="16" pos="16" name="plugin_id" type="int"/>
+		<member width="12" pos="4" name="company_id" type="int"/>
+		<member width="4" pos="0" name="plugin_type" type="int"/>
+	</bitfield>
+
+    <struct name="AkBankSourceData">
+        <field name="ulPluginID" type="ulPluginID"/>
+        <field name="StreamType" type="AKBKSourceType"/>
+        <field name="AkMediaInformation" type="AkMediaInformation"/>
+        <field name="size" type="uint" cond="ulPluginID\plugin_type #EQ# 2"/>
+    </struct>
+
+    <struct name="AkTrackSrcInfo">
+        <field name="trackID" type="uint"/>
+        <field name="sourceID" type="uint"/>
+        <field name="eventID" type="uint" since="133"/>
+        <field name="fPlayAt" type="double"/>
+        <field name="fBeginTrimOffset" type="double"/>
+        <field name="fEndTrimOffset" type="double"/>
+        <field name="fSrcDuration" type="double"/>
+    </struct>
+
+    <struct name="Sound" inherit="HircObject">
+        <field name="AkBankSourceData" type="AkBankSourceData"/>
+        <field name="NodeBaseParams" type="NodeBaseParams"/>
+    </struct>
+
+    <struct name="AkClipAutomation">
+        <field name="uClipIndex" type="uint"/>
+        <field name="eAutoType" type="uint"/>
+        <field name="uNumPoints" type="uint"/>
+        <field name="graph" type="AkRTPCGraphPoint" arr1="uNumPoints"/>
+    </struct>
+
+
+    <struct name="AkMeterInfo">
+        <field name="fGridPeriod" type="double"/>
+        <field name="fGridOffset" type="double"/>
+        <field name="fTempo" type="float"/>
+        <field name="uTimeSigNumBeatsBar" type="ubyte"/>
+        <field name="uTimeSigBeatValue" type="ubyte"/>
+    </struct>
+
+    <struct name="AkMusicMarkerWwise">
+        <field name="id" type="uint"/>
+        <field name="fPosition" type="double"/>
+        <field name="uStringSize" type="uint" until="136"/>
+        <field name="pMarkerName" type="ZString" since="137"/>
+    </struct>
+
+    <struct name="CAkStinger">
+        <field type="uint" name="TriggerID" />
+        <field type="uint" name="SegmentID" />
+        <field type="uint" name="SyncPlayAt" />
+        <field type="uint" name="uCueFilterHash" />
+        <field type="int" name="DontRepeatTime" />
+        <field type="uint" name="numSegmentLookAhead" />
+    </struct>
+
+    <struct name="MusicNodeParams" >
+        <field name="uFlags" type="ubyte"/>
+        <field name="NodeBaseParams" type="NodeBaseParams"/>
+        <field name="ulNumChilds" type="uint"/>
+        <field name="children" type="uint" arr1="ulNumChilds"/>
+        <field name="AkMeterInfo" type="AkMeterInfo"/>
+        <field name="bMeterInfoFlag" type="ubyte"/>
+        <field name="NumStingers" type="uint"/>
+        <field name="Stingers" type="CAkStinger" arr1="NumStingers"/>
+    </struct>
+
+    <struct name="MusicSegment" inherit="HircObject">
+        <field name="MusicNodeParams" type="MusicNodeParams"/>
+        <field name="fDuration" type="double" />
+        <field name="ulNumMarkers" type="uint"/>
+        <field name="markers" type="AkMusicMarkerWwise" arr1="ulNumMarkers"/>
+    </struct>
+
+    <struct name="fadeParams">
+        <field name="transitionTime" type="int"/>
+        <field name="eFadeCurve" type="uint"/>
+        <field name="iFadeOffset" type="int"/>
+    </struct>
+    
+    <struct name="AkMusicTransSrcRule" >
+        <field name="fadeParams" type="fadeParams"/>
+        <field name="eSyncType" type="uint"/>
+        <field name="uCueFilterHash" type="uint"/>
+        <field name="bPlayPostExit" type="ubyte"/>
+    </struct>
+
+    <struct name="AkMusicTransDstRule" >
+        <field name="fadeParams" type="fadeParams"/>
+        <field name="uCueFilterHash" type="uint"/>
+        <field name="uJumpToID" type="uint"/>
+        <field name="eJumpToType" type="ushort" since="133"/>
+        <field name="eEntryType" type="ushort"/>
+        <field name="bPlayPreEntry" type="ubyte"/>
+        <field name="bDestMatchSourceCueName" type="ubyte"/>
+    </struct>
+    
+    <struct name="AkMusicTransitionObject" >
+        <field type="uint" name="segmentID"/>
+        <field name="fadeInParams" type="fadeParams"/>
+        <field name="fadeOutParams" type="fadeParams"/>
+        <field type="ubyte" name="bPlayPreEntry" />
+        <field type="ubyte" name="bPlayPostExit" />
+    </struct>
+
+    <struct name="AkMusicTransitionRule" >
+        <field name="uNumSrc" type="uint"/>
+        <field name="srcID" type="uint" arr1="uNumSrc"/>
+        <field name="uNumDst" type="uint"/>
+        <field name="dstID" type="uint" arr1="uNumDst"/>
+        <field name="src_rule" type="AkMusicTransSrcRule"/>
+        <field name="dst_rule" type="AkMusicTransDstRule"/>
+        <field name="AllocTransObjectFlag" type="ubyte" />
+        <field name="transition_object" type="AkMusicTransitionObject" cond="AllocTransObjectFlag"/>
+    </struct>
+
+    <struct name="AkGameSync" >
+        <field type="uint" name="ulGroup" />
+        <field type="ubyte" name="eGroupType" />
+    </struct>
+
+    <struct name="MusicSwitch" inherit="HircObject">
+        <field name="MusicNodeParams" type="MusicNodeParams"/>
+        <field name="numRules" type="uint" />
+        <field name="rules" type="AkMusicTransitionRule" arr1="numRules"/>
+        <field name="bIsContinuePlayback" type="ubyte" />
+        <field name="uTreeDepth" type="uint" />
+        <field name="Arguments" type="AkGameSync" arr1="uTreeDepth"/>
+        <field name="uTreeDataSize" type="uint" />
+        <field name="uMode" type="ubyte" />
+        <field name="uTreeData" type="ubyte" arr1="uTreeDataSize"/>
+<!--todo-->
+<!--					<obj na="AkDecisionTree">-->
+<!--						<lst na="pNodes" co="1">-->
+<!--							<obj na="Node" ix="0">-->
+<!--								<fld ty="tid" na="key" va="0"/>-->
+<!--								<fld ty="u16" na="children.uIdx" va="1"/>-->
+<!--								<fld ty="u16" na="children.uCount" va="5"/>-->
+<!--								<fld ty="u16" na="uWeight" va="50"/>-->
+<!--								<fld ty="u16" na="uProbability" va="100"/>-->
+<!--								<lst na="pNodes" co="5">-->
+<!--									<obj na="Node" ix="0">-->
+<!--										<fld ty="tid" na="key" va="332944859"/>-->
+<!--										<fld ty="tid" na="audioNodeId" va="80303063"/>-->
+<!--										<fld ty="u16" na="uWeight" va="50"/>-->
+<!--										<fld ty="u16" na="uProbability" va="100"/>-->
+<!--									</obj>-->
+    </struct>
+
+    <struct name="SwitchParams" >
+        <field name="eGroupType" type="ubyte" />
+        <field name="uGroupID" type="uint" />
+        <field name="uDefaultSwitch" type="uint" />
+        <field name="numSwitchAssoc" type="uint" />
+        <field name="ulSwitchAssoc" type="uint" arr1="numSwitchAssoc" />
+    </struct>
+
+    <struct name="TransParams" >
+        <field name="srcFadeParams" type="fadeParams"/>
+        <field name="eSyncType" type="uint" />
+        <field name="uCueFilterHash" type="uint" />
+        <field name="destFadeParams" type="fadeParams"/>
+    </struct>
+
+    <struct name="MusicTrack" inherit="HircObject">
+        <field name="uFlags" type="ubyte"/>
+        <field name="numSources" type="uint"/>
+        <field name="AkBankSourceData" type="AkBankSourceData" arr1="numSources"/>
+        <field name="numPlaylistItem" type="uint"/>
+        <field name="pPlaylist" type="AkTrackSrcInfo" arr1="numPlaylistItem"/>
+        <field name="numSubTrack" type="uint"/>
+        <field name="numClipAutomationItem" type="uint"/>
+        <field name="pItems" type="AkClipAutomation" arr1="numClipAutomationItem"/>
+        <field name="NodeBaseParams" type="NodeBaseParams"/>
+        <field name="eTrackType" type="ubyte"/>
+        <field name="SwitchParams" type="SwitchParams" cond="eTrackType #EQ# 3"/>
+        <field name="TransParams" type="TransParams" cond="eTrackType #EQ# 3"/>
+        <field name="iLookAheadTime" type="int"/>
+    </struct>
+
+    <struct name="TypeOther" inherit="HircObject">
+        generic
+        <field name="raw" type="byte" arr1="#ARG# - 4">raw bytes</field>
+    </struct>
+
+    <struct name="HircPointer">
+        <field name="id" type="HircType"/>
+        <field name="length" type="uint">length of the following data block</field>
+        <field name="data" arg="length" type="Sound" cond="id == 2"/>
+        <field name="data" arg="length" type="EventAction" cond="id == 3"/>
+        <field name="data" arg="length" type="Event" cond="id == 4"/>
+        <field name="data" arg="length" type="RanSeqContainer" cond="id == 5"/>
+        <field name="data" arg="length" type="SwitchContainer" cond="id == 6"/>
+        <field name="data" arg="length" type="BlendContainer" cond="id == 9"/>
+        <field name="data" arg="length" type="MusicSegment" cond="id == 10"/>
+        <field name="data" arg="length" type="MusicTrack" cond="id == 11"/>
+        <field name="data" arg="length" type="MusicSwitch" cond="id == 12"/>
+        <field name="data" arg="length" type="TypeOther" cond="(id != 2) #AND# (id != 3) #AND# (id != 4) #AND# (id != 5) #AND# (id != 6) #AND# (id != 9) #AND# (id != 10) #AND# (id != 11) #AND# (id != 12)"/>
+    </struct>
+
+    <struct name="HIRCSection">
+        The HIRC section contains all the Wwise objects, including the events, the containers to group sounds, and the references to the sound files.
+        <field name="length" type="uint" >length of following data</field>
+        <field name="count" type="uint"/>
+        <field name="hirc pointers" type="HircPointer" arr1="count"/>
+    </struct>
+    
+    <struct name="StreamInfo" >
+        Describes a wem file in an s type bank stream
+        <field name="offset" type="uint64"/>
+        <field name="size" type="uint64"/>
+        <field name="event id" type="uint">referred to by the events aux file</field>
+        <field name="zero" type="uint"/>
+    </struct>
+
+    <struct name="BnkBufferData">
+        Buffer data of bnk files
+        <field name="size_b" type="uint64" >data size of aux of type b, can be in bnk's buffer 1, and maybe also an external aux b file</field>
+        <field name="external_aux_b_count" type="uint" >1, guess</field>
+        <field name="buffer_count" type="uint" >1 for PC, 2 for PZ, JWE, 6 for ZTUAC</field>
+        <field name="streams_count" type="uint" >variable</field>
+        <field name="zeros" type="uint" arr1="7">0</field>
+        <field name="zeros_per_buffer" type="uint64" arr1="external_aux_b_count" arr2="2">variable</field>
+        <field name="streams" type="StreamInfo" arr1="streams_count" >data</field>
+        <field name="name" type="ZString" >data</field>
+        <field name="external_b_suffix" type="ZString" cond="external_aux_b_count">ext format subtypes</field>
+        <field name="external_s_suffix" type="ZString" cond="streams_count">ext format subtypes</field>
+    </struct>
+
+    <struct name="BnkFileContainer" inherit="GenericHeader">
+        custom struct
+        <field name="bnk_header" type="BnkBufferData"/>
+    </struct>
+
+</fileformat>

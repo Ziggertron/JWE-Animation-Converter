@@ -1,0 +1,38 @@
+from importlib import import_module
+
+
+type_module_name_map = {
+	'Byte': 'generated.formats.base.basic',
+	'Ubyte': 'generated.formats.base.basic',
+	'Uint64': 'generated.formats.base.basic',
+	'Int64': 'generated.formats.base.basic',
+	'Uint': 'generated.formats.base.basic',
+	'UintHash': 'generated.formats.base.basic',
+	'Ushort': 'generated.formats.base.basic',
+	'Int': 'generated.formats.base.basic',
+	'Short': 'generated.formats.base.basic',
+	'Char': 'generated.formats.base.basic',
+	'Normshort': 'generated.formats.base.basic',
+	'Rangeshort': 'generated.formats.base.basic',
+	'Float': 'generated.formats.base.basic',
+	'Double': 'generated.formats.base.basic',
+	'Hfloat': 'generated.formats.base.basic',
+	'ZString': 'generated.formats.base.basic',
+	'ZStringBuffer': 'generated.formats.base.structs.ZStringBuffer',
+	'ZStringBufferPadded': 'generated.formats.base.structs.ZStringBufferPadded',
+	'PadAlign': 'generated.formats.base.structs.PadAlign',
+	'PadAlignFF': 'generated.formats.base.structs.PadAlignFF',
+	'Blob': 'generated.formats.base.structs.Blob',
+	'FixedString': 'generated.formats.base.structs.FixedString',
+	'Vector2': 'generated.formats.base.structs.Vector2',
+	'Vector3': 'generated.formats.base.structs.Vector3',
+	'Vector3Half': 'generated.formats.base.structs.Vector3Half',
+	'Vector4': 'generated.formats.base.structs.Vector4',
+}
+
+name_type_map = {}
+for type_name, module in type_module_name_map.items():
+	name_type_map[type_name] = getattr(import_module(module), type_name)
+for class_object in name_type_map.values():
+	if callable(getattr(class_object, 'init_attributes', None)):
+		class_object.init_attributes()

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="ResearchRoot" inherit="MemStruct">
+        <!-- pointer at 0 -->
+        <field name="ptr_0" type="Pointer" template="ZStringObfuscated"/>
+        <!-- FF FF FF FF 00 00 00 00 -->
+        <field name="int_0" type="int" />
+        <field name="int_1" type="int" />
+        <!-- pointer at 16 -->
+        <field name="research_name" type="Pointer" template="ZString"/>
+        <!-- pointer at 24 -->
+        <field name="research_icon" type="Pointer" template="ZString"/>
+        <!-- pointer at 32 -->
+        <field name="research_icon_queued" type="Pointer" template="ZString"/>
+        <field name="unk_1" type="int" />
+        <field name="research_cost_realmstone" type="int" />
+        <field name="int_2" type="int" />
+        <field name="research_duration" type="int" />
+        <field name="unk_3" type="uint64" />
+        <!-- dep @ 64-->
+        <field name="applied_global_buff" type="Pointer" template="AppliedGlobalBuff"/>
+        <!-- pointer at 72 -->
+        <!-- the structs under here are not understood-->
+        <field name="research_replace_squad_variants" type="ArrayPointer" template="ResearchAffectedSquaddata" arg="research_replace_squad_variants_count"/>
+        <field name="research_replace_squad_variants_count" type="uint64" />
+        <!-- pointer at 88 -->
+        <field name="affected_squad_loc" type="Pointer" template="ZString"/>
+        <!-- pointer at 96 -->
+        <field name="?unit_path" type="Pointer" template="ZString"/>
+        <!-- pointer at 104 -->        
+        <field name="research_description" type="ArrayPointer" template="ResearchDescriptionLoc" arg="research_description_count"/>
+        <!-- this is "1" which could correspond to the length of the above string list -->
+        <field name="research_description_count" type="uint64" />
+        <!-- pointer at 120 -->
+        <field name="research_flavor_text" type="Pointer" template="ZString"/>
+        <!-- pointer at 128 -->
+        <field name="applies_to_squad" type="ArrayPointer" template="ResearchDataAppliesToSquad" arg="applies_to_squad_count" />
+        <field name="applies_to_squad_count" type="uint64" />
+        <!-- pointer at 144 -->
+        <field name="research_affected_squadloadouts" type="Pointer" template="ResearchAffectSquadloadouts"/>
+        <field name="unk_9" type="uint64" />
+        <!-- pointer at 160 -->
+        <field name="research_replaceds_squads" type="Pointer" template="SquadReplacementData" arg="replacement_squad_data_count"/>
+        <field name="replacement_squad_data_count" type="uint64" />
+    </struct>
+
+    <struct name="AppliedGlobalBuff" inherit="MemStruct">
+        <field name="globalbuffdependency" type="Pointer"/>
+    </struct>
+
+    <struct name="ResearchDescriptionLoc" inherit="MemStruct">
+        <field name="research_loc" type="Pointer" template="ZString"/>
+        <field name="unk_0" type="uint64"/>
+    </struct>
+
+    <struct name="ResearchAffectSquadloadouts" inherit="MemStruct">
+        <field name="research_loc" type="ArrayPointer" template="ResearchAffectedSquadloadout" arg="affected_squadloadout_count"/>
+        <field name="affected_squadloadout_count" type="uint64"/>
+    </struct>
+
+    <struct name="ResearchAffectedSquadloadout" inherit="MemStruct">
+        <field name="affected_squad_loadout" type="Pointer"/>
+    </struct>
+
+    <struct name="SquadReplacementData" inherit="MemStruct">
+        <field name="squaddata_ref" type="Pointer"/>
+    </struct>
+
+    <struct name="ResearchDataAppliesToSquad" inherit="MemStruct">
+        <field name="dependency_name" type="Pointer"/>
+    </struct>
+
+    <struct name="ResearchAffectedSquaddata" inherit="MemStruct">
+        <field name="affected_squaddata_from" type="Pointer"/>
+        <field name="affected_squaddata_to" type="Pointer"/>
+        <!-- pointer @ 16 -->
+        <field name="affected_squad_transition_fx" type="Pointer" template="ResearchFXData"/>
+    </struct>
+
+    <struct name="ResearchFXData" inherit="MemStruct">
+        <field name="unk_0" type="uint64"/>
+        <!-- pointer @ 8 -->
+        <field name="research_complete_fx" type="Pointer" template="SubResearchFXData"/>
+        <!-- seems to correspond to the above as a count, but the pointers are different structs-->
+        <field name="unk_1" type="uint64"/>
+        <field name="unk_2" type="uint64"/>
+    </struct>
+
+    <struct name="SubResearchFXData" inherit="MemStruct">
+        <!--pointer @ 0 -->
+        <field name="fx_name" type="Pointer" template="FxDataName"/>
+        <!--pointer @ 0 -->
+        <field name="fx_params" type="Pointer" template="FxDataSettings"/>
+    </struct>
+
+    <struct name="FxDataName" inherit="MemStruct">
+        <field name="unk_0" type="uint64"/>
+        <!--pointer @ 8 -->
+        <field name="unk_ptr" type="Pointer" template="ZString"/>
+        <!-- all of these are 0-->
+        <field name="unk_1" type="uint64"/>
+        <field name="unk_2" type="uint64"/>
+        <field name="unk_3" type="uint64"/>
+        <field name="unk_4" type="uint64"/>
+        <field name="unk_5" type="uint64"/>
+        <field name="unk_6" type="uint64"/>
+        <field name="unk_7" type="uint64"/>
+    </struct>
+
+    <struct name="FxDataSettings" inherit="MemStruct">
+        <field name="unk_0" type="uint64"/>
+        <!--pointer @ 8 -->
+        <field name="unk_ptr_0" type="Pointer" template="ZString"/>
+        <!--pointer @ 16 -->
+        <field name="unk_ptr_1" type="Pointer" template="ZString"/>
+        <!-- all of these are 0-->
+        <field name="unk_1" type="uint64"/>
+        <field name="unk_2" type="uint64"/>
+        <field name="unk_3" type="uint64"/>
+        <field name="unk_4" type="uint64"/>
+        <field name="unk_5" type="uint64"/>
+        <field name="unk_6" type="uint64"/>
+        <field name="unk_7" type="uint64"/>
+    </struct>
+
+</fileformat>

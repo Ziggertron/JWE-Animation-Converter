@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="DataStreamsRoot" inherit="MemStruct">
+        JWE1 16 bytes
+        <field name="layers_count" type="uint64" />
+        <field name="layers"  type="ArrayPointer" template="DataStreamsSettings" arg="layers_count"/>
+    </struct>
+
+    <struct name="DataStreamsSettings" inherit="MemStruct">
+        JWE1 48 bytes
+        JWE3 64 bytes
+<!--        use ovl version, as mime version is still 1 -->
+        <field name="c0" type="ushort" default="1" since="20" />
+        <field name="c1" type="ushort" default="1" since="20" />
+        <field name="z0" type="uint" default="0" optional="True" since="20" />
+        <field name="name_a"  type="Pointer" template="ZString"/>
+        <field name="name_b"  type="Pointer" template="ZString"/>
+        <field name="z1" type="uint64" default="0" optional="True" />
+        <field name="z2" type="uint64" default="0" optional="True" />
+        <field name="data_count" type="uint64" />
+        <field name="data"  type="ArrayPointer" template="CurveDataPoint" arg="data_count"/>
+    </struct>
+
+    <!-- below is copied directly from motiongraph! -->
+
+    <enum name="SubCurveType" numbytes="2" storage="ushort" default="0">
+		<option value="0" name="Constant" />
+		<option value="1" name="Linear" />
+		<option value="2" name="Polynomial" />
+		<option value="3" name="Exponential" />
+		<option value="4" name="SCurve" />
+		<option value="5" name="Bezier" />
+    </enum>
+
+    <struct name="CurveDataPoint" inherit="MemStruct">
+        12 bytes
+        <field name="x" type="float"/>
+        <field name="y" type="short"/>
+        <field name="SubCurveType" type="SubCurveType"/>
+        <field name="SubsequentCurveParam" type="short"/>
+        <field name="SubsequentCurveParamB" type="short"/>
+    </struct>
+
+</fileformat>

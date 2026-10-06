@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="TerrainIndexedDetailLayersRoot" inherit="MemStruct">
+        # 16 bytes
+        <field name="layer_list"  type="ArrayPointer" template="TerrainDetailsLayerItem" arg="layer_count"/>
+        <field name="layer_count" type="uint64" />
+
+    </struct>
+
+    <struct name="TerrainDetailsLayerItem" inherit="MemStruct">
+        <field name="layer_name"  type="Pointer" template="ZString"/>
+        <!-- seems like layer to brushes list -->
+        <field name="info_list"   type="ArrayPointer" template="brushitemStruct" arg="info_count"/>
+        <field name="info_count"  type="uint64" />
+
+    </struct>
+
+    <struct name="brushitemStruct" inherit="MemStruct">
+        <field name="layer_name"  type="Pointer" template="ZString"/>
+        <field name="brush_name"  type="Pointer" template="ZString"/>
+    </struct>
+
+</fileformat>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="TechTreeRoot" inherit="MemStruct">
+        <!-- pointer at 0 -->
+        <field name="filename" type="Pointer" template="ZStringObfuscated"/>
+        <field name="buffer_0" type="int"/>
+        <field name="buffer_1" type="int"/>
+        <!-- pointer at 16 -->
+        <field name="tech_levels" type="ArrayPointer" template="TechLevel" arg="tech_levels_count"/>
+        <field name="tech_levels_count" type="uint64"/>
+    </struct>
+
+    <struct name="TechLevel" inherit="MemStruct">
+        <!-- pointer at 0 -->
+        <field name="automatic_research" type="ArrayPointer" template="ResearchDataDep" arg="automatic_research_count" />
+        <field name="automatic_research_count" type="uint"/>
+        <field name="unknown_0" type="int"/>
+        <!-- pointer at 16 -->
+        <field name="unlockable_research" type="ArrayPointer" template="ResearchDataDep" arg="unlockable_research_count" />
+        <field name="unlockable_research_count" type="uint"/>
+        <field name="unknown_1" type="int"/>
+        <!-- pointer at 32 -->
+        <field name="mutexed_unlockable_research" type="ArrayPointer" template="MutexResearch" arg="mutexed_unlockable_research_count"/>
+        <field name="mutexed_unlockable_research_count" type="uint"/>
+        <field name="unknown_2" type="int"/>
+    </struct>
+
+    <struct name="MutexResearch" inherit="MemStruct">
+        <field name="mutex_options" type="ArrayPointer" template="ResearchDataDep" arg="mutex_options_count"/>
+        <field name="mutex_options_count" type="uint64"/>
+    </struct>
+
+    <struct name="ResearchDataDep" inherit="MemStruct">
+        <field name="research_data_dependency" type="Pointer"/>
+    </struct>
+
+</fileformat>

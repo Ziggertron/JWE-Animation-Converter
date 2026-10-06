@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="SpatialUIThemeRoot" inherit="MemStruct">
+        <field name="SpatialUITheme_Texture_list"  type="ArrayPointer" template="SpatialUITheme_Texture" arg="SpatialUITheme_Texture_count"/>
+        <field name="SpatialUITheme_Texture_count" type="uint64" />
+    </struct>
+
+    <struct name="SpatialUITheme_Texture" inherit="MemStruct">
+        <field name="SpatialUITheme_Texture_Id" type="uint64" />
+        <field name="SpatialUITheme_Texture_Name" type="Pointer" template="ZString"/>
+        <field name="SpatialUITheme_Colour" type="ByteColor" />
+        <field name="SpatialUITheme_Colour_Unknown" type="int" />
+    </struct>
+
+</fileformat>

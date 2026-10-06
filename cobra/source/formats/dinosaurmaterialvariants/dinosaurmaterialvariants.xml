@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="CommonHeader" inherit="MemStruct" >
+        <field name="fgm_name" type="Pointer" template="ZStringObfuscated"/>
+    </struct>
+
+
+    <struct name="Variant" inherit="MemStruct" >
+        <field name="has_ptr" type="uint64"/>
+        <field name="variant_name" type="Pointer" template="ZString"/>
+    </struct>
+
+    <struct name="DinoVariantsHeader" inherit="CommonHeader" >
+        <field name="has_sets" type="uint64"/> <!-- seen either 0 or 1, could possibly be more, would need refactor in that case -->
+		<!-- # 0 for rex 93 - has no materialpatterns, so that's probably why it's different -->
+        <field name="set_name" type="Pointer" template="ZString"/>
+        <field name="variants" type="ArrayPointer" template="Variant" arg="variant_count"/>
+        <field name="variant_count" type="uint64"/>
+        <field name="zero" type="uint64"/>
+    </struct>
+
+
+    <struct name="Layer" inherit="MemStruct" >
+        <field name="increment_channel" type="uint64">1 to use next mask channel, 0 to use same as previous</field>
+        <field name="texture_fgm_name" type="Pointer" template="ZString">defines the tiled texture material to be used</field>
+        <field name="transform_fgm_name" type="Pointer" template="ZString">defines how to transform the texture</field>
+    </struct>
+
+    <struct name="DinoLayersHeader" inherit="CommonHeader" >
+        <field name="layers" type="ArrayPointer" template="Layer" arg="layer_count"/>
+        <field name="layer_count" type="uint64"/>
+        <field name="zero" type="uint64"/>
+    </struct>
+
+
+    <struct name="Pattern" inherit="MemStruct" >
+        <field name="has_ptr" type="uint64"/>
+        <field name="pattern_name" type="Pointer" template="ZString"/>
+    </struct>
+
+    <struct name="DinoPatternsHeader" inherit="CommonHeader" >
+        <field name="set_count" type="uint64"/>
+        <field name="set_name" type="Pointer" template="ZString"/>
+        <field name="patterns" type="ArrayPointer" template="Pattern" arg="pattern_count"/>
+        <field name="pattern_count" type="uint64"/>
+        <field name="zero" type="uint64"/>
+    </struct>
+
+    <struct name="Vector3f" inherit="MemStruct" >
+        <field name="x" type="float"/>
+        <field name="y" type="float"/>
+        <field name="z" type="float"/>
+    </struct>
+
+    <struct name="DinoEffectsHeader" inherit="CommonHeader" >
+        <field name="vec0" type="Vector3f"/>
+        <field name="vec1" type="Vector3f"/>
+        <field name="a" type="uint"/>
+        <field name="b" type="uint"/>
+        <field name="vec2" type="Vector3f"/>
+        <field name="vec3" type="Vector3f"/>
+        <field name="vec4" type="Vector3f"/>
+        <field name="vec5" type="Vector3f"/>
+        <field name="c" type="uint"/>
+        <field name="d" type="uint"/>
+        <field name="floats1" type="float" arr1="2"/>
+        <field name="e" type="uint"/>
+        <field name="floats2" type="float" arr1="2"/>
+        <field name="f" type="uint"/>
+        <field name="floats3" type="float" arr1="8"/>
+        <field name="g" type="uint"/>
+        <field name="floats4" type="float" arr1="6"/>
+        <field name="h" type="uint"/>
+        <field name="floats5" type="float" arr1="20"/>
+        <field name="i" type="uint"/>
+        <field name="float" type="float"/>
+     </struct>
+
+</fileformat>

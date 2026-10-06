@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fileformat>
+<fileformat>
+
+	<xi:include href="../ovl_base/ovl_base.xml" xmlns:xi="http://www.w3.org/2001/XInclude" xpointer="xpointer(*/*)" />
+
+    <struct name="SpecdefPointer" inherit="Pointer" >
+    </struct>
+
+    <enum name="SpecdefDtype" numbytes="4" storage="uint" default="0">
+		<option value="0" name="Boolean" />
+		<option value="1" name="Int8" />
+		<option value="2" name="Int16" />
+		<option value="3" name="Int32" />
+		<option value="4" name="Int64" />
+		<option value="5" name="UInt8" />
+		<option value="6" name="UInt16" />
+		<option value="7" name="UInt32" />
+		<option value="8" name="UInt64" />
+		<option value="9" name="Float" />
+		<option value="10" name="String" />
+		<option value="11" name="Vector2" />
+		<option value="12" name="Vector3" />
+		<option value="13" name="Array" />
+		<option value="14" name="ChildItem" />
+		<option value="15" name="ReferenceToObject" />
+    </enum>
+
+    <struct name="SpecdefRoot" inherit="MemStruct">
+        <field name="attrib_count" type="ushort" />
+        <field name="flags" type="ushort" />
+        <field name="names_count" type="ubyte" />
+        <field name="childspecs_count" type="ubyte" />
+        <field name="managers_count" type="ubyte" />
+        <field name="scripts_count" type="ubyte" />
+        <field name="attribs" type="ArrayPointer" template="Spec" arg="attrib_count"/>
+        <field name="name_foreach_attribs" type="ForEachPointer" template="NamePtr" arg="attribs"/>
+        <field name="data_foreach_attribs" type="ForEachPointer" template="DataPtr" arg="attribs"/>
+
+        <field name="names" type="Pointer" template="ZStringList" arg="names_count"/>
+        <field name="childspecs" type="Pointer" template="ZStringList" arg="childspecs_count"/>
+        <field name="managers" type="Pointer" template="ZStringList" arg="managers_count"/>
+        <field name="scripts" type="Pointer" template="ZStringList" arg="scripts_count"/>
+    </struct>
+
+    <struct name="Spec" inherit="MemStruct">
+        <field name="dtype" type="SpecdefDtype" />
+    </struct>
+
+    <struct name="NamePtr" inherit="MemStruct">
+        <field name="name_ptr" type="Pointer" template="ZString" />
+    </struct>
+
+    <struct name="DataPtr" inherit="MemStruct">
+        #ARG# is dtype
+        <field name="data_ptr" type="Pointer" template="Data" arg="#ARG# \ dtype"/>
+    </struct>
+
+    <struct name="BooleanData" inherit="MemStruct">
+        8 bytes in log
+        <field name="ivalue" type="ubyte"/>
+        <field name="ioptional" type="ubyte"/>
+        <field name="unused" type="ubyte" arr1="6"/>
+    </struct>
+
+    <struct name="Int8Data" inherit="MemStruct">
+        8 bytes
+        <field name="imin" type="byte"/>
+        <field name="imax" type="byte"/>
+        <field name="ivalue" type="byte"/>
+        <field name="ioptional" type="byte"/>
+        <field name="unused" type="ubyte" arr1="4"/>
+        <field name="enum" type="Pointer" />
+    </struct>
+
+    <struct name="Int16Data" inherit="MemStruct">
+        8 bytes
+        <field name="imin" type="short"/>
+        <field name="imax" type="short"/>
+        <field name="ivalue" type="short"/>
+        <field name="ioptional" type="short"/>
+        <field name="enum" type="Pointer" />
+    </struct>
+
+    <struct name="Int32Data" inherit="MemStruct">
+        16 bytes
+        <field name="imin" type="int"/>
+        <field name="imax" type="int"/>
+        <field name="ivalue" type="int"/>
+        <field name="ioptional" type="int"/>
+        <field name="enum" type="Pointer" />
+    </struct>
+
+    <struct name="Int64Data" inherit="MemStruct">
+        48 bytes in log
+        <field name="imin" type="int64"/>
+        <field name="imax" type="int64"/>
+        <field name="ivalue" type="int64"/>
+        <field name="ioptional" type="int64"/>
+        <field name="enum" type="Pointer" />
+    </struct>
+
+    <struct name="Uint8Data" inherit="MemStruct">
+        24 bytes in log
+        <field name="imin" type="ubyte"/>
+        <field name="imax" type="ubyte"/>
+        <field name="ivalue" type="ubyte"/>
+        <field name="ioptional" type="ubyte"/>
+        <field name="unused" type="ubyte" arr1="4"/>
+        <field name="enum" type="Pointer" />
+    </struct>
+
+    <struct name="Uint16Data" inherit="MemStruct">
+        24 bytes in log
+        <field name="imin" type="ushort"/>
+        <field name="imax" type="ushort"/>
+        <field name="ivalue" type="ushort"/>
+        <field name="ioptional" type="ushort"/>
+        <field name="enum" type="Pointer" />
+    </struct>
+
+    <struct name="Uint32Data" inherit="MemStruct">
+        32 in log with enum
+        <field name="imin" type="uint"/>
+        <field name="imax" type="uint"/>
+        <field name="ivalue" type="uint"/>
+        <field name="ioptional" type="uint"/>
+        <field name="enum" type="Pointer" />
+    </struct>
+
+    <struct name="Uint64Data" inherit="MemStruct">
+        48 bytes in log
+        <field name="imin" type="uint64"/>
+        <field name="imax" type="uint64"/>
+        <field name="ivalue" type="uint64"/>
+        <field name="ioptional" type="uint64"/>
+        <field name="enum" type="Pointer" />
+    </struct>
+
+    <struct name="FloatData" inherit="MemStruct">
+        16 bytes in log
+        <field name="imin" type="float"/>
+        <field name="imax" type="float"/>
+        <field name="ivalue" type="float"/>
+        <field name="ioptional" type="uint"/>
+    </struct>
+
+    <struct name="StringData" inherit="MemStruct">
+        16 bytes in log
+        <field name="str_name" type="Pointer" template="ZString" />
+        <field name="ioptional" type="uint"/>
+    </struct>
+
+    <struct name="Vector2" inherit="MemStruct">
+        16 bytes
+        <field name="x" type="float"/>
+        <field name="y" type="float"/>
+        <field name="ioptional" type="uint"/>
+        <field name="unused" type="uint"/>
+    </struct>
+
+    <struct name="Vector3" inherit="MemStruct">
+        16 bytes in log
+        <field name="x" type="float"/>
+        <field name="y" type="float"/>
+        <field name="z" type="float"/>
+        <field name="ioptional" type="uint"/>
+    </struct>
+
+    <struct name="ArrayData" inherit="MemStruct">
+        16 bytes in log
+        <field name="item" type="Pointer" template="Data" arg="dtype"/>
+        <field name="dtype" type="SpecdefDtype" />
+        <field name="unused" type="uint" />
+    </struct>
+
+    <struct name="ChildSpecData" inherit="MemStruct">
+        8 bytes
+        eg. spineflex.specdef points to dependency for another specdef
+        eg. flatridecontroller.specdef points to SpecdefRoot
+        <field name="specdef" type="SpecdefPointer" template="SpecdefRoot"/>
+    </struct>
+
+    <struct name="ReferenceToObjectData" inherit="MemStruct">
+        16 bytes in log
+        <field name="obj_name" type="Pointer" template="ZString" />
+        <field name="ioptional" type="uint"/>
+    </struct>
+
+    <struct name="Data" inherit="MemStruct">
+        #ARG# is dtype
+        todo - enum, grab, implement, fetch
+        <field name="dtype" type="BooleanData" cond="#ARG# #EQ# 0"/>
+        <field name="dtype" type="Int8Data" cond="#ARG# #EQ# 1"/>
+        <field name="dtype" type="Int16Data" cond="#ARG# #EQ# 2"/>
+        <field name="dtype" type="Int32Data" cond="#ARG# #EQ# 3"/>
+        <field name="dtype" type="Int64Data" cond="#ARG# #EQ# 4"/>
+        <field name="dtype" type="Uint8Data" cond="#ARG# #EQ# 5"/>
+        <field name="dtype" type="Uint16Data" cond="#ARG# #EQ# 6"/>
+        <field name="dtype" type="Uint32Data" cond="#ARG# #EQ# 7"/>
+        <field name="dtype" type="Uint64Data" cond="#ARG# #EQ# 8"/>
+        <field name="dtype" type="FloatData" cond="#ARG# #EQ# 9"/>
+        <field name="dtype" type="StringData" cond="#ARG# #EQ# 10"/>
+        <field name="dtype" type="Vector2" cond="#ARG# #EQ# 11"/>
+        <field name="dtype" type="Vector3" cond="#ARG# #EQ# 12"/>
+        <field name="dtype" type="ArrayData" cond="#ARG# #EQ# 13"/>
+        <field name="dtype" type="ChildSpecData" cond="#ARG# #EQ# 14"/>
+        <field name="dtype" type="ReferenceToObjectData" cond="#ARG# #EQ# 15"/>
+    </struct>
+
+</fileformat>
